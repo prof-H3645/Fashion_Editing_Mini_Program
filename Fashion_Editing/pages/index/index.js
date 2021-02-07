@@ -10,7 +10,7 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     list: [{
         "text": "蒙版",
-        "iconPath": "/icon/蒙版 (1).png",
+        "iconPath": "/icon/蒙版(1).png",
         "selectedIconPath": "/icon/蒙版.png",
       },
       {
@@ -25,9 +25,12 @@ Page({
       },
       {
         "text": "导出",
-        "iconPath": "/icon/导出 (1).png",
+        "iconPath": "/icon/导出(1).png",
         "selectedIconPath": "/icon/导出.png",
       },
+    ],
+    files: [
+        
     ]
   },
   tabChange(e) {
@@ -40,39 +43,53 @@ Page({
     })
   },
   onLoad() {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
-    }
-  },
-  getUserInfo(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
     this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+      selectFile: this.selectFile.bind(this),
+      uplaodFile: this.uplaodFile.bind(this)
+  })
+  },
+  onUndo(e){
+    console.log(e)
+  },
+  onUndo(e){
+    console.log(e)
+  },
+  chooseImage: function (e) {
+    var that = this;
+    wx.chooseImage({
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: function (res) {
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            that.setData({
+                files: that.data.files.concat(res.tempFilePaths)
+            });
+        }
     })
-  }
+},
+previewImage: function(e){
+    wx.previewImage({
+        current: e.currentTarget.id, // 当前显示图片的http链接
+        urls: this.data.files // 需要预览的图片http链接列表
+    })
+},
+selectFile(files) {
+    console.log('files', files)
+    // 返回false可以阻止某次文件上传
+},
+uplaodFile(files) {
+    console.log('upload files', files)
+    // 文件上传的函数，返回一个promise
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject('some error')
+        }, 1000)
+    })
+},
+uploadError(e) {
+    console.log('upload error', e.detail)
+},
+uploadSuccess(e) {
+    console.log('upload success', e.detail)
+}
 })

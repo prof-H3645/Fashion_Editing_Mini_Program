@@ -1,3 +1,16 @@
 <!--index.wxml-->
+<view>
+  <image mode="aspectFit" class="button" src="/icon/seleted.png" bindtap="onGenerate"></image>
+  <image mode="aspectFit" class="button" src="/icon/return.png" bindtap="onUndo"></image>
+</view>
 
-<mp-tabbar style="position:fixed;bottom:0;width:100%;left:0;right:0;" list="{{list}}" bindchange="tabChange"></mp-tabbar>
+
+<view class="uploader">
+  <mp-uploader style="background-color: white" bindfail="uploadError" bindsuccess="uploadSuccess"
+    select="{{selectFile}}" upload="{{uplaodFile}}" files="{{files}}" title="" tips="点击上传图片"
+    ext-class="background-color: white;"></mp-uploader>
+</view>
+
+
+<mp-tabbar style="position:fixed;bottom:0;width:100%;left:0;right:0;" list="{{list}}" bindchange="tabChange">
+</mp-tabbar>

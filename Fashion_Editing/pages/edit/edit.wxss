@@ -1,0 +1,35 @@
+/* pages/edit/edit.wxss */
+.button {
+  width: 80rpx;
+  height: 80rpx;
+  margin-top: 10rpx;
+  margin-right: 30rpx;
+}
+
+.left-m {
+  /* 靠左-中等距离 */
+  position: fixed;
+  left: 20rpx;
+  top: 10rpx;
+}
+
+.right-s {
+  /* 靠右-小距离 */
+  position: fixed;
+  right: 0rpx;
+  top: 10rpx;
+}
+
+.right-l {
+  /* 靠左-大距离 */
+  position: fixed;
+  right: 100rpx;
+  top: 10rpx;
+}
+
+.upload-image {
+  display:flex;
+  height: 600px;                    
+  justify-content: center;       
+  align-items:center;
+}

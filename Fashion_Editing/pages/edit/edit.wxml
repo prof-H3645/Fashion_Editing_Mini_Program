@@ -1,0 +1,11 @@
+<!--pages/edit/edit.wxml-->
+<view>
+  <image mode="aspectFit" class="button right-s" src="/icon/seleted.png" bindtap="onGenerate"></image>
+  <image mode="aspectFit" class="button right-l" src="/icon/return.png" bindtap="onUndo"></image>
+  <image mode="aspectFit" class="button left-m" src="/icon/close.png" bindtap="onCancel"></image>
+</view>
+<view class="upload-image" >
+  <image mode="widthFix" src="{{ imagePath }}"></image>
+</view>
+<mp-tabbar style="position:fixed;bottom:0;width:100%;left:0;right:0;" list="{{list}}" bindchange="tabChange">
+</mp-tabbar>

@@ -42,9 +42,9 @@ App({
   },
   globalData: {
     imgPath: '/images/test.jpg',
-    imgWidth: 0,
-    imgHeight: 0,
-    screenWidth: 0,
-    screenHeight: 0,
+    imgWidth: 500,
+    imgHeight: 766,
+    screenWidth: 375,
+    screenHeight: 667,
   }
 })

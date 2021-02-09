@@ -39,23 +39,6 @@ Page({
         console.log("图片上传失败！");
       }
     });
-    // var tempFilePaths = res.tempFilePaths;
-    //       for (var i = 0; i < tempFilePaths.length; i++) {
-    //         pics.push(tempFilePaths[i]);
-    //         //将pics图片数组转为base64字符串数组 如果上传时不需要的话可以忽略此处
-    //         wx.getFileSystemManager().readFile({
-    //           filePath: tempFilePaths[i], //选择图片返回的相对路径
-    //           encoding: 'base64', //编码格式
-    //           success: res => { //成功的回调
-    //             base64Pic.push(res.data);
-    //             that.setData({
-    //               pics: pics,
-    //               base64Pic: base64Pic,
-    //             });
-    //           }, fail: function (res) {
-    //             that.show("图片上传失败！");
-    //           }
-    //         });
 
   },
   // 事件处理函数
@@ -65,13 +48,6 @@ Page({
     })
   },
   onLoad() {
-    this.setData({
-      selectFile: this.selectFile.bind(this),
-      uplaodFile: this.uplaodFile.bind(this)
-    })
-  },
-  onUndo(e) {
-    console.log(e)
   },
   chooseImage: function (e) {
     var that = this;
@@ -85,32 +61,4 @@ Page({
       }
     })
   },
-  previewImage: function (e) {
-    wx.previewImage({
-      current: e.currentTarget.id, // 当前显示图片的http链接
-      urls: this.data.files // 需要预览的图片http链接列表
-    })
-  },
-  selectFile(files) {
-    console.log('files', files)
-    // 返回false可以阻止某次文件上传
-  },
-  uplaodFile(files) {
-    console.log('upload files', files)
-    // 文件上传的函数，返回一个promise
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        reject('some error')
-      }, 1000)
-    })
-  },
-  uploadError(e) {
-    console.log('upload error', e.detail)
-    wx.navigateTo({
-      url: '/pages/edit/edit'
-    })
-  },
-  uploadSuccess(e) {
-    console.log('upload success', e.detail)
-  }
 })

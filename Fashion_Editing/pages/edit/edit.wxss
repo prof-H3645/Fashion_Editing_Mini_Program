@@ -56,21 +56,22 @@
 }
 
 .t-item{
-  width: 76rpx;
-  height: 76rpx;
-  margin: 6rpx;
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  margin: 20rpx auto;
   text-align: center;
-  line-height: 76rpx;
+  line-height: 40rpx;
   border-radius: 50%;
 }
 
 .t-item-cur{
-  width: 70rpx;
-  height: 70rpx;
-  border: 2px solid #CCC;
-  margin: 6rpx;
+  width: 43rpx;
+  height: 45rpx;
+  border: 4rpx solid #CCC;
+  margin: 20rpx auto;
   text-align: center;
-  line-height: 70rpx;
+  line-height: 45rpx;
   border-radius: 50%;
 }
 
@@ -88,4 +89,10 @@
   width: 78rpx;
   height: 78rpx;
   margin: 6rpx;
+}
+
+.lower-toolsbar {
+  width: 100%;
+  position: fixed;
+  bottom: 0rpx;
 }

@@ -1,6 +1,13 @@
 // app.js
 App({
   onLaunch() {
+    var that = this;
+    wx.getSystemInfo({
+      success: (result) => {
+        that.globalData.screenWidth = result.screenWidth;
+        that.globalData.screenHeight = result.screenHeight;
+      },
+    })
     // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -34,6 +41,10 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    imgPath: '/images/test.jpg',
+    imgWidth: 0,
+    imgHeight: 0,
+    screenWidth: 0,
+    screenHeight: 0,
   }
 })

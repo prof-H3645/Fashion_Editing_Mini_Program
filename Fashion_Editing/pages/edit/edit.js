@@ -5,7 +5,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    imagePath: '/images/test.jpg',
+    imgPath: '/images/test.jpg',
+    canvasWidth: 0,
+    canvasHeight: 0,
+    imgWidth: 0,
+    imgHeight: 0,
+    screenWidth: 0,
+    screenHeight: 0,
     list: [{
         "text": "蒙版",
         "iconPath": "/icon/蒙版(1).png",
@@ -28,6 +34,10 @@ Page({
       // },
     ],
   },
+  penConfig:{
+    color:"#000",
+    fontSize:4
+  },
   tabChange(e) {
     console.log('tab change', e)
   },
@@ -35,7 +45,31 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.canvasContext = wx.createCanvasContext("myCanvas")
+    const app = getApp();
+    this.setData({
+      imgPath: app.globalData.imgPath,
+      imgWidth: app.globalData.imgWidth,
+      imgHeight: app.globalData.imgHeight,
+      canvasWidth: (app.globalData.screenWidth - 10) * 2,
+      canvasHeight: (app.globalData.screenHeight - 200) * 2,
+      screenWidth: app.globalData.screenWidth - 10,
+      screenHeight: app.globalData.screenHeight - 200,
+    })
+    let imgWidth = this.data.imgWidth
+    let imgHeight = this.data.imgHeight
+    let screenWidth = this.data.screenWidth
+    let screenHeight = this.data.screenHeight
+    if (imgWidth <= screenWidth && imgHeight <= screenHeight) {
+      this.canvasContext.drawImage(this.data.imgPath,50,50,imgWidth,imgHeight, (screenWidth - imgWidth) / 2, (screenHeight - imgHeight) / 2, imgWidth, imgHeight)
+    } else {
+      this.canvasContext.drawImage(this.data.imgPath, 0, 0, screenWidth, screenWidth)
+    }
+    this.canvasContext.draw();
+    this.setData({
+      curColor:"#000000",
+      curSize:"4"
+    });
   },
 
   /**
@@ -86,19 +120,83 @@ Page({
   onShareAppMessage: function () {
 
   },
-  onClose(e){
+  onClose(e) {
     console.log(e);
     wx.navigateTo({
       url: '/pages/index/index'
     })
   },
-  onUndo(e){
+  onUndo(e) {
     console.log(e);
   },
-  onGenerate(e){
+  onGenerate(e) {
     console.log(e);
     wx.navigateTo({
       url: '/pages/output/output'
     })
-  }
+  },
+  /**
+   * 开始画笔
+   */
+  touchStart: function (e) {
+    //获取当前画笔（手触摸的位置）的x,y坐标
+    this.startX = e.changedTouches[0].x
+    this.startY = e.changedTouches[0].y
+
+    // console.log("startX: ",this.startX)
+    // console.log("startY: ",this.startY)
+
+    //设置画笔
+    this.canvasContext.setStrokeStyle(this.penConfig.color)
+    this.canvasContext.setLineWidth(this.penConfig.fontSize)
+    this.canvasContext.setLineCap('round')
+    this.canvasContext.beginPath()
+  },
+
+  /**
+   * 开始画线条
+   */
+  touchMove: function (e) {
+    let tmpX = e.changedTouches[0].x
+    let tmpY = e.changedTouches[0].y
+
+    this.canvasContext.moveTo(this.startX, this.startY)
+    this.canvasContext.lineTo(tmpX, tmpY)
+    this.canvasContext.stroke()
+
+    this.startX = tmpX
+    this.startY = tmpY
+
+    //生成到canvas上
+    var tmpActions = this.canvasContext.getActions()
+    wx.drawCanvas({
+      canvasId: 'myCanvas',
+      reserve: true,
+      actions: tmpActions
+    })
+  },
+
+  /**
+   * 画笔的颜色选择
+   */
+  colorSelect: function (e) {
+    let color = e.currentTarget.dataset.p
+    console.log(color)
+    this.penConfig.color = color
+    this.setData({
+      curColor: color
+    })
+  },
+
+  /**
+   * 画笔的粗细选择
+   */
+  penSizeSelect: function (e) {
+    let ps = e.currentTarget.dataset.p
+    console.log(ps)
+    this.penConfig.fontSize = ps
+    this.setData({
+      curSize: ps
+    })
+  },
 })

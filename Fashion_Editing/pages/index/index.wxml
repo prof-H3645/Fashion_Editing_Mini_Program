@@ -1,6 +1,6 @@
 <!--index.wxml-->
-<view class="uploader">
-  <mp-uploader style="background-color: white" bindfail="uploadError" bindsuccess="uploadSuccess"
-    select="{{selectFile}}" upload="{{uplaodFile}}" files="{{files}}" title="" tips="点击上传图片"
-    ext-class="background-color: white;"></mp-uploader>
+<view>
+  <view class="info">时尚编辑，用画笔描绘出你的时尚！</view>
+  <button class="uploader" bindtap="handleChooseAlbum">+</button>
+  <text class="tips">点击上传图片</text>
 </view>

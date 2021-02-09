@@ -1,6 +1,4 @@
 {
   "usingComponents": {
-    "mp-tabbar": "weui-miniprogram/tabbar/tabbar",
-    "mp-uploader": "weui-miniprogram/uploader/uploader"
   }
 }

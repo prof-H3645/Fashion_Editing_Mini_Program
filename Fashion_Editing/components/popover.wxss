@@ -7,15 +7,18 @@
 /* 实现三角形 */
 .popover-view::after {
   position: absolute;
-  left: 25%;
+  margin-top: -7px;
+  left: 35%;
   top: 100%;
   display: inline-block;
   width: 0;
   height: 0px;
   content: '';
   border-style: solid;
-  border-width: 10px;
-  border-color: #fff transparent transparent transparent;
+  border-width: 7px;
+  border-color: transparent #fff #fff transparent;
+  box-shadow: 2px 2px #ddd;
+  transform: rotate(45deg);
 }
 
 /* 上 */

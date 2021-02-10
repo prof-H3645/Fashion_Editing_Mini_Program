@@ -1,6 +1,6 @@
 .popover-item {
   width: 20%;
-  font-size: 14px;
+  font-size: 28rpx;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -10,5 +10,5 @@
   background-color: #EEE;
 }
 .underline{
-  border-bottom:1px #EEE solid;
+  border-bottom:2rpx #EEE solid;
 }

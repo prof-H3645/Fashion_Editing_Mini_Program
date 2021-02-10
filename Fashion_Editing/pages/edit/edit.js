@@ -6,12 +6,13 @@ Page({
    */
   data: {
     imgPath: '/images/test.jpg',
-    canvasWidth: 0,
-    canvasHeight: 0,
+    canvas_X: 0,
+    canvas_Y: 0,
     imgWidth: 0,
     imgHeight: 0,
     screenWidth: 0,
     screenHeight: 0,
+    Dpr: 2,
     toolsList: [{
         "text": "蒙版",
         "iconPath": "/icon/蒙版(1).png",
@@ -39,14 +40,18 @@ Page({
     fontSize: 4
   },
   tabChange(e) {
-    console.log('tab change', e)
-    if(e.detail.index == 1){
+    var index = e.currentTarget.dataset.index;
+    console.log('tab change', index);
+    if (index == 0) {
+      console.log(index);
+      this.popoverSize.onHide();
+      this.popoverColor.onHide();
+    } else if (index == 1) {
       wx.createSelectorQuery().select('#size').boundingClientRect(res => {
         this.popoverSize.onDisplay(res);
         this.popoverColor.onHide();
       }).exec();
-    }
-    else if(e.detail.index == 2){
+    } else if (index == 2) {
       wx.createSelectorQuery().select('#color').boundingClientRect(res => {
         this.popoverColor.onDisplay(res);
         this.popoverSize.onHide();
@@ -61,8 +66,9 @@ Page({
     const app = getApp();
     let imgWidth = app.globalData.imgWidth;
     let imgHeight = app.globalData.imgHeight;
-    let screenWidth = app.globalData.screenWidth - 20;
-    let screenHeight = app.globalData.screenHeight - 200;
+    let Dpr = app.globalData.Dpr;
+    let screenWidth = app.globalData.screenWidth - 10 * Dpr;
+    let screenHeight = app.globalData.screenHeight - 100 * Dpr;
     let per = 1.0;
     while (per > 0.0 && (imgWidth >= screenWidth || imgHeight >= screenHeight)) {
       per -= 0.05;
@@ -73,14 +79,15 @@ Page({
       imgPath: app.globalData.imgPath,
       imgWidth: imgWidth,
       imgHeight: imgHeight,
-      canvasWidth: (app.globalData.screenWidth - 10) * 2,
-      canvasHeight: (app.globalData.screenHeight - 200) * 2,
+      canvas_X: 5 * Dpr +(screenWidth - imgWidth) / 2,
+      canvas_Y: 10 * Dpr +(screenHeight - imgHeight) / 2,
       screenWidth: screenWidth,
       screenHeight: screenHeight,
+      Dpr: Dpr
     })
 
     if (imgWidth <= screenWidth && imgHeight <= screenHeight) {
-      this.canvasContext.drawImage(this.data.imgPath, 50, 50, imgWidth, imgHeight, (screenWidth - imgWidth) / 2, (screenHeight - imgHeight) / 2, imgWidth, imgHeight)
+      this.canvasContext.drawImage(this.data.imgPath, 0,0, imgWidth, imgHeight)
     } else {
       this.canvasContext.drawImage(this.data.imgPath, 0, 0, screenWidth, screenWidth)
     }
@@ -159,6 +166,8 @@ Page({
    * 开始画笔
    */
   touchStart: function (e) {
+    this.popoverColor.onHide();
+    this.popoverSize.onHide();
     //获取当前画笔（手触摸的位置）的x,y坐标
     this.startX = e.changedTouches[0].x
     this.startY = e.changedTouches[0].y
@@ -219,23 +228,4 @@ Page({
       curSize: ps
     })
   },
-  onTap: function (e) {
-    // 获取按钮元素的坐标信息
-    var id = '#button' // 或者 e.target.id 获取点击元素的 ID 值
-    wx.createSelectorQuery().select(id).boundingClientRect(res => {
-      // 调用自定义组件 popover 中的 onDisplay 方法
-      console.log(res);
-      this.popover.onDisplay(res);
-    }).exec();
-  },
-
-  // 响应popover组件中的子元素点击事件
-  onClickA: function (e) {
-    wx.showToast({
-      title: '你点击了A',
-      icon: 'none'
-    });
-    // 调用自定义组件 popover 中的 onHide 方法
-    this.popover.onHide();
-  }
 })

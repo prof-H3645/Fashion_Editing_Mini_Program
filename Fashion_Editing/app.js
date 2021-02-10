@@ -6,6 +6,7 @@ App({
       success: (result) => {
         that.globalData.screenWidth = result.screenWidth;
         that.globalData.screenHeight = result.screenHeight;
+        that.globalData.Dpr = result.pixelRatio;
       },
     })
     // 展示本地存储能力
@@ -46,5 +47,6 @@ App({
     imgHeight: 766,
     screenWidth: 375,
     screenHeight: 667,
+    Dpr: 2,
   }
 })

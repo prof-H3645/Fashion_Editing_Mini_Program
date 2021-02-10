@@ -1,2 +1,3 @@
 <!--pages/output/output.wxml-->
-<text>pages/output/output.wxml</text>
+<view class="info">点击保存与分享！</view>
+

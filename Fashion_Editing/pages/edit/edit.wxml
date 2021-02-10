@@ -1,72 +1,25 @@
 <!--pages/edit/edit.wxml-->
+<!-- 上层工具栏 -->
 <view class="upper-toolsbar">
-      <image mode="aspectFit" class="button right-s" src="/icon/seleted.png" bindtap="onGenerate"></image>
-      <image mode="aspectFit" class="button right-l" src="/icon/return.png" bindtap="onUndo"></image>
-      <image mode="aspectFit" class="button left-s" src="/icon/close.png" bindtap="onClose"></image>
+      <image mode="aspectFit" class="upper-button right-s" src="/icon/seleted.png" bindtap="onGenerate"></image>
+      <image mode="aspectFit" class="upper-button right-l" src="/icon/return.png" bindtap="onUndo"></image>
+      <image mode="aspectFit" class="upper-button left-s" src="/icon/close.png" bindtap="onClose"></image>
 </view>
 <!-- 画布 -->
 <view>
       <canvas canvas-id="myCanvas" class="myCanvas"
-            style="width:{{imgWidth}}px;height:{{imgHeight}}px;marign-top:100rpx" bindtouchstart="touchStart"
-            bindtouchmove="touchMove"></canvas>
+            style="width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{canvas_X}}px;top:{{canvas_Y}}px"
+            bindtouchstart="touchStart" bindtouchmove="touchMove"></canvas>
 </view>
-<!-- <view class="toolsbar">
-    <view class="canvas_tools">
-      <view class="{{ curColor == '#d71345' ? 't-item-cur' : 't-item'}}"    
-            style="background-color:#d71345"
-            bindtap="colorSelect" data-p="#d71345"></view> 
-      <view class="{{ curColor == '#f58220' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#f58220"
-            bindtap="colorSelect" data-p="#f58220"></view>
-      <view class="{{ curColor == '#ffd400' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#ffd400"
-            bindtap="colorSelect" data-p="#ffd400"></view>
-      <view class="{{ curColor == '#7fb80e' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#7fb80e"
-            bindtap="colorSelect" data-p="#7fb80e"></view>
-      <view class="{{ curColor == '#00a6ac' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#00a6ac"
-            bindtap="colorSelect" data-p="#00a6ac"></view>
-      <view class="{{ curColor == '#009ad6' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#009ad6"
-            bindtap="colorSelect" data-p="#009ad6"></view>
-      <view class="{{ curColor == '#444693' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#444693"
-            bindtap="colorSelect" data-p="#444693"></view>
-      <view class="{{ curColor == '#000000' ? 't-item-cur' : 't-item'}}" 
-            style="background-color:#000000"
-            bindtap="colorSelect" data-p="#000000"></view>
-    </view>
+<!-- 下层工具栏 -->
+<view class="lower-toolsbar">
+      <view class="lower-button" bindtap="tabChange" data-index="{{0}}"><image mode="heightFit" src="/icon/蒙版(1).png"></image><text>\n蒙版</text></view>
+      <view class="lower-button" bindtap="tabChange" data-index="{{1}}"><image mode="heightFit" src="/icon/实物-画笔(1).png"></image><text>\n画笔</text></view>
+      <view class="lower-button" bindtap="tabChange" data-index="{{2}}"><image mode="heightFit" src="/icon/颜色选择器(1).png"></image><text>\n颜色</text></view>
+</view>
 
-    <view class="canvas_tools">
-      <view class="{{curSize == '4' ? 't-item-cur' : 't-item'}}"    
-            bindtap="penSizeSelect" data-p="4">细</view> 
-      <view class="{{curSize == '10' ? 't-item-cur' : 't-item'}}" 
-            bindtap="penSizeSelect" data-p="10">中</view>
-      <view class="{{curSize == '20' ? 't-item-cur' : 't-item'}}" 
-            bindtap="penSizeSelect" data-p="20">粗</view>
-      
-      <view class="t-clear" bindtap="clearCanvas">清空</view>
-
-      <view class="t-insert" bindtap="insertImage">
-            <image src="/images/加号.png" 
-                   style="width:78rpx;height:78rpx"></image>
-      </view>
-      </view>
-  </view>  -->
-<!-- <view class='container'>
-
-  <view id='button' bindtap='onTap'>Click Me</view>
-
-  <popover id='popover'>
-    <popover-item bindtap='onClickA' hasline>内容超出会自动隐藏用...表示</popover-item>
-    <popover-item hasline>子菜单B</popover-item>
-    <popover-item>子菜单C</popover-item>
-  </popover>
-</view> -->
-<mp-tabbar class="lower-toolsbar" list="{{toolsList}}" bindchange="tabChange">
-</mp-tabbar>
-<popover id="size" pw="{{40}}" ph="{{300}}" px="{{170}}" py="{{420}}" vertical="top" align="center">
+<!-- 弹框 -->
+<popover id="size" pw="{{20 * Dpr}}" px="{{(screenWidth - 20)/2}}" py="{{screenHeight - 80/Dpr}}" vertical="top" align="center">
       <popover-item>
             <view class="{{curSize == '4' ? 't-item-cur' : 't-item'}}" bindtap="penSizeSelect" data-p="4">细</view>
       </popover-item>
@@ -76,10 +29,9 @@
       <popover-item>
             <view class="{{curSize == '20' ? 't-item-cur' : 't-item'}}" bindtap="penSizeSelect" data-p="20">粗</view>
       </popover-item>
-
-
 </popover>
-<popover id="color" pw="{{40}}" ph="{{300}}" px="{{290}}" py="{{220}}" vertical="top" align="center">
+
+<popover id="color" pw="{{20 * Dpr}}" px="{{screenWidth  * 5 / 6 - 7}}" py="{{screenHeight - 80 / Dpr - 200}}" vertical="top" align="center">
       <popover-item>
             <view class="{{ curColor == '#d71345' ? 't-item-cur' : 't-item'}}" style="background-color:#d71345"
                   bindtap="colorSelect" data-p="#d71345"></view>
@@ -93,12 +45,10 @@
                   bindtap="colorSelect" data-p="#ffd400"></view>
       </popover-item>
       <popover-item>
-
             <view class="{{ curColor == '#7fb80e' ? 't-item-cur' : 't-item'}}" style="background-color:#7fb80e"
                   bindtap="colorSelect" data-p="#7fb80e"></view>
       </popover-item>
       <popover-item>
-
             <view class="{{ curColor == '#00a6ac' ? 't-item-cur' : 't-item'}}" style="background-color:#00a6ac"
                   bindtap="colorSelect" data-p="#00a6ac"></view>
       </popover-item>
@@ -110,13 +60,8 @@
             <view class="{{ curColor == '#444693' ? 't-item-cur' : 't-item'}}" style="background-color:#444693"
                   bindtap="colorSelect" data-p="#444693"></view>
       </popover-item>
-
       <popover-item>
             <view class="{{ curColor == '#000000' ? 't-item-cur' : 't-item'}}" style="background-color:#000000"
                   bindtap="colorSelect" data-p="#000000"></view>
       </popover-item>
-
-
-
-
 </popover>

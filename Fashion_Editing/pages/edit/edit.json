@@ -3,6 +3,6 @@
     "mp-tabbar": "weui-miniprogram/tabbar/tabbar",
     "popover": "/components/popover",
     "popover-item": "/components/popover-item"
-  }
-
+  },
+  "disableScroll":true
 }

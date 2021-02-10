@@ -1,1 +1,10 @@
 /* pages/output/output.wxss */
+.info {
+  display: block;
+  width: 400rpx;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 100rpx;
+  font-size: 20px;
+  color: #07c160;
+}

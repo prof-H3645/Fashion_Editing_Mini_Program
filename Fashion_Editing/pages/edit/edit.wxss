@@ -1,4 +1,5 @@
 /* pages/edit/edit.wxss */
+@import "/icon/iconfont.wxss";
 .upper-toolsbar {
   display: block;
   width: 100%;
@@ -34,40 +35,42 @@
   border: 1px solid #666;
 }
 
-.t-item{
-  width: 40rpx;
-  height: 40rpx;
-  line-height: 40rpx;
-  margin: 20rpx auto;
+.color-item{
+  width: 60%;
+  height: 60%;
+  margin: 10rpx auto;
   text-align: center;
-  line-height: 40rpx;
+  line-height: 60%;
   border-radius: 50%;
 }
 
-.t-item-cur{
-  width: 43rpx;
+.color-item-cur{
+  width: 65%;
+  height: 65%;
+  border: 4rpx solid #CCC;
+  margin: 5rpx auto;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.size-item{
+  width: 100%;
+  height: 100%;
+  margin: 10rpx auto;
+  text-align: center;
+  line-height: 100%;
+  border-radius: 50%;
+}
+
+.size-item-cur{
+  width: 45rpx;
   height: 45rpx;
   border: 4rpx solid #CCC;
-  margin: 17rpx auto;
+  margin: 5rpx auto;
   text-align: center;
-  line-height: 40rpx;
+  line-height: 45rpx;
+
   border-radius: 50%;
-}
-
-.t-clear{
-  width: 70rpx;
-  height: 70rpx;
-  margin: 6rpx;
-  text-align: center;
-  line-height: 70rpx;
-  border: 2px solid #bfbfbf;
-  border-radius: 5rpx;
-}
-
-.t-insert{
-  width: 78rpx;
-  height: 78rpx;
-  margin: 6rpx;
 }
 
 .lower-toolsbar {
@@ -80,20 +83,18 @@
 
 .lower-button {
   display: inline-block;
-  width: 33.3%;
+  width: 25%;
   text-align: center;
   color: #7f8389;
-  font-size: 20rpx;
+  font-size: 22rpx;
 }
 
-.lower-button image {
-  display: inline-block;
-  width: 60rpx;
-  height: 60rpx;
-  margin: 10rpx auto -20rpx;
+.lower-button .iconfont {
+  height: 70rpx;
+  font-size: 50rpx;
+  line-height: 70rpx;
 }
 
-.lower-button text {
-  margin-top: -10rpx;
-}
-
+/* .lower-button text {
+  font-size: 200rpx;
+} */

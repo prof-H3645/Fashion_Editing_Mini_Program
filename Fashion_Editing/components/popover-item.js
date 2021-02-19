@@ -13,7 +13,8 @@ Component({
     hasline: {
       type: Boolean,
       value: false
-    }
+    },
+    height: Number
   },
 
   /**

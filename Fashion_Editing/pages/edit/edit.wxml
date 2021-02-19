@@ -13,55 +13,69 @@
 </view>
 <!-- 下层工具栏 -->
 <view class="lower-toolsbar">
-      <view class="lower-button" bindtap="tabChange" data-index="{{0}}"><image mode="heightFit" src="/icon/蒙版(1).png"></image><text>\n蒙版</text></view>
-      <view class="lower-button" bindtap="tabChange" data-index="{{1}}"><image mode="heightFit" src="/icon/实物-画笔(1).png"></image><text>\n画笔</text></view>
-      <view class="lower-button" bindtap="tabChange" data-index="{{2}}"><image mode="heightFit" src="/icon/颜色选择器(1).png"></image><text>\n颜色</text></view>
+      <!-- <view class="lower-button" bindtap="tabChange" data-index="{{0}}"><image mode="heightFit" src="/icon/蒙版(1).png"></image><text>\n蒙版</text></view> -->
+      <view class="lower-button" bindtap="tabChange" data-index="{{0}}">
+            <view class="iconfont icon-mask"></view><text>蒙版</text>
+      </view>
+      <view class="lower-button" bindtap="tabChange" data-index="{{1}}">
+            <view class="iconfont icon-pen"></view><text>素描</text>
+      </view>
+      <view class="lower-button" bindtap="tabChange" data-index="{{2}}">
+            <view class="iconfont icon-brush"></view><text>画笔</text>
+      </view>
+      <view class="lower-button" bindtap="tabChange" data-index="{{3}}">
+            <view class="iconfont icon-color"></view><text>颜色</text>
+      </view>
+      <!-- <view class="lower-button" bindtap="tabChange" data-index="{{1}}"><image mode="heightFit" src="/icon/实物-画笔(1).png"></image><text>\n画笔</text></view>
+      <view class="lower-button" bindtap="tabChange" data-index="{{2}}"><image mode="heightFit" src="/icon/颜色选择器(1).png"></image><text>\n颜色</text></view> -->
 </view>
 
 <!-- 弹框 -->
-<popover id="size" pw="{{20 * Dpr}}" px="{{(screenWidth - 20)/2}}" py="{{screenHeight - 80/Dpr}}" vertical="top" align="center">
-      <popover-item>
-            <view class="{{curSize == '4' ? 't-item-cur' : 't-item'}}" bindtap="penSizeSelect" data-p="4">细</view>
+<popover id="size" pw="{{20 * Dpr}}" px="{{(screenWidth - 10) * 5 / 8}}" py="{{screenHeight - 80/Dpr}}" vertical="top"
+      align="center">
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{curSize == '4' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="4">细</view>
       </popover-item>
-      <popover-item>
-            <view class="{{curSize == '10' ? 't-item-cur' : 't-item'}}" bindtap="penSizeSelect" data-p="10">中</view>
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{curSize == '10' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="10">中</view>
       </popover-item>
-      <popover-item>
-            <view class="{{curSize == '20' ? 't-item-cur' : 't-item'}}" bindtap="penSizeSelect" data-p="20">粗</view>
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{curSize == '20' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="20">粗</view>
       </popover-item>
 </popover>
 
-<popover id="color" pw="{{20 * Dpr}}" px="{{screenWidth  * 5 / 6 - 7}}" py="{{screenHeight - 80 / Dpr - 200}}" vertical="top" align="center">
-      <popover-item>
-            <view class="{{ curColor == '#d71345' ? 't-item-cur' : 't-item'}}" style="background-color:#d71345"
+<popover id="color" pw="{{20 * Dpr}}" px="{{(screenWidth - 7) * 7 / 8 }}" py="{{screenHeight - 80 / Dpr - 200}}"
+      vertical="top" align="center">
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#d71345' ? 'color-item-cur' : 'color-item'}}" style="background-color:#d71345"
                   bindtap="colorSelect" data-p="#d71345"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#f58220' ? 't-item-cur' : 't-item'}}" style="background-color:#f58220"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#f58220' ? 'color-item-cur' : 'color-item'}}" style="background-color:#f58220"
                   bindtap="colorSelect" data-p="#f58220"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#ffd400' ? 't-item-cur' : 't-item'}}" style="background-color:#ffd400"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#ffd400' ? 'color-item-cur' : 'color-item'}}" style="background-color:#ffd400"
                   bindtap="colorSelect" data-p="#ffd400"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#7fb80e' ? 't-item-cur' : 't-item'}}" style="background-color:#7fb80e"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#7fb80e' ? 'color-item-cur' : 'color-item'}}" style="background-color:#7fb80e"
                   bindtap="colorSelect" data-p="#7fb80e"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#00a6ac' ? 't-item-cur' : 't-item'}}" style="background-color:#00a6ac"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#00a6ac' ? 'color-item-cur' : 'color-item'}}" style="background-color:#00a6ac"
                   bindtap="colorSelect" data-p="#00a6ac"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#009ad6' ? 't-item-cur' : 't-item'}}" style="background-color:#009ad6"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#009ad6' ? 'color-item-cur' : 'color-item'}}" style="background-color:#009ad6"
                   bindtap="colorSelect" data-p="#009ad6"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#444693' ? 't-item-cur' : 't-item'}}" style="background-color:#444693"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#444693' ? 'color-item-cur' : 'color-item'}}" style="background-color:#444693"
                   bindtap="colorSelect" data-p="#444693"></view>
       </popover-item>
-      <popover-item>
-            <view class="{{ curColor == '#000000' ? 't-item-cur' : 't-item'}}" style="background-color:#000000"
+      <popover-item height="{{20 * Dpr}}">
+            <view class="{{ curColor == '#000000' ? 'color-item-cur' : 'color-item'}}" style="background-color:#000000"
                   bindtap="colorSelect" data-p="#000000"></view>
       </popover-item>
 </popover>

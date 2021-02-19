@@ -99,7 +99,7 @@ Component({
     },
     // 获取所有子元素的总高度
     getItemsHeight() {
-      return this.getItems().map(item => item.data.height).reduce((a, b) => a + b, 0);
+      return this.getItems().map(item => item.properties.height).reduce((a, b) => a + b, 0);
     }
   }
 

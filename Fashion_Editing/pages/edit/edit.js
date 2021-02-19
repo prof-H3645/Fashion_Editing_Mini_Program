@@ -13,27 +13,9 @@ Page({
     screenWidth: 0,
     screenHeight: 0,
     Dpr: 2,
-    toolsList: [{
-        "text": "蒙版",
-        "iconPath": "/icon/蒙版(1).png",
-        "selectedIconPath": "/icon/蒙版.png",
-      },
-      {
-        "text": "画笔 ",
-        "iconPath": "/icon/实物-画笔(1).png",
-        "selectedIconPath": "/icon/实物-画笔.png",
-      },
-      {
-        "text": "颜色",
-        "iconPath": "/icon/颜色选择器(1).png",
-        "selectedIconPath": "/icon/颜色选择器.png",
-      },
-      // {
-      //   "text": "导出",
-      //   "iconPath": "/icon/导出(1).png",
-      //   "selectedIconPath": "/icon/导出.png",
-      // },
-    ],
+    allDrawWorksPath: [],
+    curColor: "#000000",
+    curSize: "4"
   },
   penConfig: {
     color: "#000",
@@ -43,15 +25,33 @@ Page({
     var index = e.currentTarget.dataset.index;
     console.log('tab change', index);
     if (index == 0) {
-      console.log(index);
+      console.log('mask');
       this.popoverSize.onHide();
       this.popoverColor.onHide();
-    } else if (index == 1) {
+      this.penConfig.color = '#fff';
+      this.penConfig.fontSize = 4;
+      this.setData({
+        curColor: "#ffffff",
+        curSize: "4"
+      });
+    }
+    else if (index == 1) {
+      console.log('sketch');
+      this.popoverSize.onHide();
+      this.popoverColor.onHide();
+      this.penConfig.color = '#fff';
+      this.penConfig.fontSize = 4;
+      this.setData({
+        curColor: "#000",
+        curSize: "4"
+      });
+    }
+     else if (index == 2) {
       wx.createSelectorQuery().select('#size').boundingClientRect(res => {
         this.popoverSize.onDisplay(res);
         this.popoverColor.onHide();
       }).exec();
-    } else if (index == 2) {
+    } else if (index == 3) {
       wx.createSelectorQuery().select('#color').boundingClientRect(res => {
         this.popoverColor.onDisplay(res);
         this.popoverSize.onHide();
@@ -158,9 +158,31 @@ Page({
   },
   onGenerate(e) {
     console.log(e);
-    wx.navigateTo({
-      url: '/pages/output/output'
-    })
+    var self = this;
+    wx.canvasToTempFilePath({
+      canvasId: "myCanvas",
+      success: function (res) {
+        var imgPath = res.tempFilePath;
+         console.log(imgPath);
+         var allDrawWorksPath = self.data.allDrawWorksPath;
+         allDrawWorksPath.push(imgPath);
+         self.setData({
+            allDrawWorksPath: allDrawWorksPath,
+         });
+         console.log(imgPath);
+         var app = getApp();
+         app.globalData.outputPath = imgPath;
+      },
+      fail: res => {
+         console.log('获取画布图片失败', res);
+      },
+      complete: res => {
+        wx.navigateTo({
+          url: '/pages/output/output'
+        })
+      }
+   })
+
   },
   /**
    * 开始画笔

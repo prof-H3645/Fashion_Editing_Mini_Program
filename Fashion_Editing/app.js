@@ -48,5 +48,6 @@ App({
     screenWidth: 375,
     screenHeight: 667,
     Dpr: 2,
+    outputPath: '/images/test.jpg',
   }
 })

@@ -8,3 +8,10 @@
   font-size: 20px;
   color: #07c160;
 }
+
+.output {
+  display: flex;
+  width: 80%;
+  margin: 40rpx auto;
+
+}

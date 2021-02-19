@@ -1,3 +1,4 @@
 <!--pages/output/output.wxml-->
-<view class="info">点击保存与分享！</view>
+<view class="info"><text>完成!\n点击保存与分享！</text></view>
+<image class="output" mode="widthFix" src="{{outputPath}}"></image>
 

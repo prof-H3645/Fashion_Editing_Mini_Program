@@ -95,6 +95,6 @@
   line-height: 70rpx;
 }
 
-/* .lower-button text {
-  font-size: 200rpx;
-} */
+.green {
+  color: #07c160;
+}

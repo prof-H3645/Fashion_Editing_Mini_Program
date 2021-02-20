@@ -10,17 +10,24 @@
       <canvas canvas-id="myCanvas" class="myCanvas"
             style="width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{canvas_X}}px;top:{{canvas_Y}}px"
             bindtouchstart="touchStart" bindtouchmove="touchMove"></canvas>
+      <canvas canvas-id="mask"
+            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
+      <canvas canvas-id="sketch"
+            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
+      <canvas canvas-id="brush"
+            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
 </view>
+
 <!-- 下层工具栏 -->
 <view class="lower-toolsbar">
       <!-- <view class="lower-button" bindtap="tabChange" data-index="{{0}}"><image mode="heightFit" src="/icon/蒙版(1).png"></image><text>\n蒙版</text></view> -->
-      <view class="lower-button" bindtap="tabChange" data-index="{{0}}">
+      <view class="{{mode == 0 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{0}}">
             <view class="iconfont icon-mask"></view><text>蒙版</text>
       </view>
-      <view class="lower-button" bindtap="tabChange" data-index="{{1}}">
+      <view class="{{mode == 1 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{1}}">
             <view class="iconfont icon-pen"></view><text>素描</text>
       </view>
-      <view class="lower-button" bindtap="tabChange" data-index="{{2}}">
+      <view class="{{mode == 2 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{2}}">
             <view class="iconfont icon-brush"></view><text>画笔</text>
       </view>
       <view class="lower-button" bindtap="tabChange" data-index="{{3}}">
@@ -37,14 +44,16 @@
             <view class="{{curSize == '4' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="4">细</view>
       </popover-item>
       <popover-item height="{{20 * Dpr}}">
-            <view class="{{curSize == '10' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="10">中</view>
+            <view class="{{curSize == '10' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="10">中
+            </view>
       </popover-item>
       <popover-item height="{{20 * Dpr}}">
-            <view class="{{curSize == '20' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="20">粗</view>
+            <view class="{{curSize == '20' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="20">粗
+            </view>
       </popover-item>
 </popover>
 
-<popover id="color" pw="{{20 * Dpr}}" px="{{(screenWidth - 7) * 7 / 8 }}" py="{{screenHeight - 80 / Dpr - 200}}"
+<popover id="color" pw="{{20 * Dpr}}" px="{{(screenWidth - 7) * 7 / 8 }}" py="{{screenHeight - 80 / Dpr - 160}}"
       vertical="top" align="center">
       <popover-item height="{{20 * Dpr}}">
             <view class="{{ curColor == '#d71345' ? 'color-item-cur' : 'color-item'}}" style="background-color:#d71345"
@@ -74,8 +83,10 @@
             <view class="{{ curColor == '#444693' ? 'color-item-cur' : 'color-item'}}" style="background-color:#444693"
                   bindtap="colorSelect" data-p="#444693"></view>
       </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#000000' ? 'color-item-cur' : 'color-item'}}" style="background-color:#000000"
-                  bindtap="colorSelect" data-p="#000000"></view>
-      </popover-item>
 </popover>
+
+<view>
+      <canvas canvas-id="myCanvas" class="myCanvas"
+            style="width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{300}}px;top:{{800}}px" bindtouchstart="touchStart"
+            bindtouchmove="touchMove"></canvas>
+</view>

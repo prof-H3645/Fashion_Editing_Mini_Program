@@ -1,4 +1,13 @@
 <!--pages/output/output.wxml-->
-<view class="info"><text>完成!\n点击保存与分享！</text></view>
-<image class="output" mode="widthFix" src="{{outputPath}}"></image>
-
+<view class="info"><text>完成!</text></view>
+<image class="output" mode="heightFix" src="{{outputPath}}"></image>
+<view class="info"><text>快分享给你的朋友吧！</text></view>
+<view class="weui-btn-area_inline">
+  <button style="width:33%" class="weui-btn_inline" type="primary" bindtap="onShare">
+    <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 分享
+  </button>
+  <button style="width:33%" class="weui-btn_inline" type="primary" bindtap="onSave">
+    <icon style="margin-top: -8rpx;" class="iconfont icon-save"></icon> 保存
+  </button>
+</view>
+<view class="blank"></view>

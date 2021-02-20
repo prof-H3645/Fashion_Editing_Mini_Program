@@ -4,5 +4,5 @@
     "popover": "/components/popover",
     "popover-item": "/components/popover-item"
   },
-  "disabledScroll": true
+  "disableScroll": true
 }

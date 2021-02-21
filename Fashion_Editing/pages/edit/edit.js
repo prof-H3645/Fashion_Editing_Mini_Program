@@ -19,7 +19,8 @@ Page({
     sketchDrawWorksPath: [],
     brushDrawWorksPath: [],
     curColor: "#000",
-    curSize: "4"
+    curSize: "4",
+    step: 0,
   },
   penConfig: {
     color: "#d71345",
@@ -58,13 +59,14 @@ Page({
     } else {
       this.canvasContext.drawImage(this.data.imgPath, 0, 0, screenWidth, screenWidth)
     }
-    this.maskCanvasContext.fillRect(0,0,imgWidth, imgHeight)
+    this.maskCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
     this.maskCanvasContext.draw();
-    this.brushCanvasContext.fillRect(0,0,imgWidth, imgHeight)
+    this.brushCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
     this.brushCanvasContext.draw();
-    this.sketchCanvasContext.fillRect(0,0,imgWidth, imgHeight)
+    this.sketchCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
     this.sketchCanvasContext.draw();
     this.canvasContext.draw();
+    this.data.allDrawWorksPath.push({mode:3,path:this.data.imgPath})
     this.setData({
       curColor: "#000",
       curSize: "4"
@@ -135,10 +137,36 @@ Page({
       url: '/pages/index/index'
     })
   },
-  onUndo(e) {
+  onRevoke(e) {
     console.log(e);
-    this.canvasContext.restore();
+    var imgWidth = this.data.imgWidth;
+    var imgHeight = this.data.imgHeight;
+    this.setData({
+      step: this.data.step - 1
+    })
+    console.log(this.data.step);
+    var mode = this.data.allDrawWorksPath.pop().mode;
+    console.log(mode);
+    console.log(this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1]);
+    this.canvasContext.drawImage(this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path, 0, 0, imgWidth, imgHeight);
     this.canvasContext.draw();
+
+    if (mode == 0) {
+      this.data.maskDrawWorksPath.pop();
+      this.maskCanvasContext.drawImage(this.data.maskDrawWorksPath.indexOf(this.data.maskDrawWorksPath.length - 1), 0, 0, imgWidth, imgHeight);
+      this.maskCanvasContext.draw();
+
+    } else if (mode == 1) {
+      this.data.sketchDrawWorksPath.pop();
+      this.sketchCanvasContext.drawImage(this.data.sketchDrawWorksPath.indexOf(this.data.sketchDrawWorksPath.length - 1), 0, 0, imgWidth, imgHeight);
+      this.sketchCanvasContext.draw();
+
+    } else if (mode == 2) {
+      this.data.brushDrawWorksPath.pop();
+      this.brushCanvasContext.drawImage(this.data.brushDrawWorksPath.indexOf(this.data.brushDrawWorksPath.length - 1), 0, 0, imgWidth, imgHeight);
+      this.brushCanvasContext.draw();
+      
+    }
   },
   onGenerate(e) {
     console.log(e);
@@ -147,7 +175,6 @@ Page({
     console.log(this.data.sketchDrawWorksPath);
     console.log(this.data.brushDrawWorksPath);
     var app = getApp();
-    console.log(this.data.allDrawWorksPath.pop());
     app.globalData.outputPath = this.data.allDrawWorksPath.pop().path;
     wx.navigateTo({
       url: '/pages/output/output',
@@ -167,19 +194,17 @@ Page({
     this.canvasContext.setLineWidth(this.data.curSize)
     this.canvasContext.setLineCap('round')
     this.canvasContext.beginPath()
-    if(this.data.mode == 0){//蒙版，固定白色+中尺寸
+    if (this.data.mode == 0) { //蒙版，固定白色+中尺寸
       this.maskCanvasContext.setStrokeStyle("#000")
       this.maskCanvasContext.setLineWidth('10')
       this.maskCanvasContext.setLineCap('round')
       this.maskCanvasContext.beginPath()
-    }
-    else if(this.data.mode == 1){//素描，由于黑色背景，所以固定白色+细尺寸
+    } else if (this.data.mode == 1) { //素描，由于黑色背景，所以固定白色+细尺寸
       this.sketchCanvasContext.setStrokeStyle("#fff")
       this.sketchCanvasContext.setLineWidth('4')
       this.sketchCanvasContext.setLineCap('round')
       this.sketchCanvasContext.beginPath()
-    }
-    else if(this.data.mode == 2){//画笔，普通彩色
+    } else if (this.data.mode == 2) { //画笔，普通彩色
       this.brushCanvasContext.setStrokeStyle(this.penConfig.color)
       this.brushCanvasContext.setLineWidth(this.penConfig.fontSize)
       this.brushCanvasContext.setLineCap('round')
@@ -197,18 +222,16 @@ Page({
     this.canvasContext.moveTo(this.startX, this.startY);
     this.canvasContext.lineTo(tmpX, tmpY);
     this.canvasContext.stroke();
-    
-    if(this.data.mode == 0){
+
+    if (this.data.mode == 0) {
       this.maskCanvasContext.moveTo(this.startX, this.startY)
       this.maskCanvasContext.lineTo(tmpX, tmpY)
       this.maskCanvasContext.stroke()
-    }
-    else if(this.data.mode == 1){
+    } else if (this.data.mode == 1) {
       this.sketchCanvasContext.moveTo(this.startX, this.startY)
       this.sketchCanvasContext.lineTo(tmpX, tmpY)
       this.sketchCanvasContext.stroke()
-    }
-    else if(this.data.mode == 2){
+    } else if (this.data.mode == 2) {
       this.brushCanvasContext.moveTo(this.startX, this.startY)
       this.brushCanvasContext.lineTo(tmpX, tmpY)
       this.brushCanvasContext.stroke()
@@ -217,6 +240,37 @@ Page({
     this.startY = tmpY
 
     //生成到canvas上
+    var tmpActions = this.canvasContext.getActions()
+    wx.drawCanvas({
+      canvasId: 'myCanvas',
+      reserve: true,
+      actions: tmpActions
+    })
+    if (this.data.mode == 0) {
+      wx.drawCanvas({
+        canvasId: 'mask',
+        reserve: true,
+        actions: this.maskCanvasContext.getActions()
+      })
+    } else if (this.data.mode == 1) {
+      wx.drawCanvas({
+        canvasId: 'sketch',
+        reserve: true,
+        actions: this.sketchCanvasContext.getActions()
+      })
+    } else if (this.data.mode == 2) {
+      wx.drawCanvas({
+        canvasId: 'brush',
+        reserve: true,
+        actions: this.brushCanvasContext.getActions()
+      })
+    }
+  },
+  touchEnd: function (e) {
+    //生成到canvas上
+    this.setData({
+      step: this.data.step + 1
+    })
     var tmpActions = this.canvasContext.getActions()
     var tmpDrawWorkPath, branchDrawWorkPath;
     var self = this;
@@ -228,68 +282,48 @@ Page({
     wx.canvasToTempFilePath({
       canvasId: "myCanvas",
       success: function (res) {
-        tmpDrawWorkPath = res.tempFilePath;
+        self.data.allDrawWorksPath.push({
+          mode: self.data.mode,
+          path: res.tempFilePath
+        })
       },
       fail: res => {
         console.log('获取画布图片失败', res);
       },
-    },this)
-    if(this.data.mode==0){
-      wx.drawCanvas({
-        canvasId: 'mask',
-        reserve: true,
-        actions: this.maskCanvasContext.getActions()
-      })
+    }, this)
+    if (this.data.mode == 0) {
       wx.canvasToTempFilePath({
         canvasId: "mask",
         success: function (res) {
-          branchDrawWorkPath = res.tempFilePath;
-          self.data.maskDrawWorksPath.push(branchDrawWorkPath);
+          self.data.maskDrawWorksPath.push(res.tempFilePath);
         },
         fail: res => {
           console.log('获取画布图片失败', res);
         },
-      },this)
-      this.data.allDrawWorksPath.push({mode: 0,path: tmpDrawWorkPath});
-    }
-    else if(this.data.mode==1){
-      wx.drawCanvas({
-        canvasId: 'sketch',
-        reserve: true,
-        actions: this.sketchCanvasContext.getActions()
-      })
+      }, this)
+    } else if (this.data.mode == 1) {
       wx.canvasToTempFilePath({
         canvasId: "sketch",
         success: function (res) {
-          branchDrawWorkPath = res.tempFilePath;
-          self.data.sketchDrawWorksPath.push(branchDrawWorkPath);
+          self.data.sketchDrawWorksPath.push(res.tempFilePath);
         },
         fail: res => {
           console.log('获取画布图片失败', res);
         },
-      },this)
-      this.data.allDrawWorksPath.push({mode: 1,path: tmpDrawWorkPath});
-    }
-    else if(this.data.mode==2){
-      wx.drawCanvas({
-        canvasId: 'brush',
-        reserve: true,
-        actions: this.brushCanvasContext.getActions()
-      })
+      }, this)
+    } else if (this.data.mode == 2) {
       wx.canvasToTempFilePath({
         canvasId: "brush",
         success: function (res) {
-          branchDrawWorkPath = res.tempFilePath;
-          self.data.brushDrawWorksPath.push(branchDrawWorkPath);
+          self.data.brushDrawWorksPath.push(res.tempFilePath);
         },
         fail: res => {
           console.log('获取画布图片失败', res);
         },
-      },this)
-      this.data.allDrawWorksPath.push({mode: 2,path: tmpDrawWorkPath});
+      }, this)
     }
-  },
 
+  },
   /**
    * 画笔的颜色选择
    */

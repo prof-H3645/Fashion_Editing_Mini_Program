@@ -2,14 +2,14 @@
 <!-- 上层工具栏 -->
 <view class="upper-toolsbar">
       <image mode="aspectFit" class="upper-button right-s" src="/icon/seleted.png" bindtap="onGenerate"></image>
-      <image mode="aspectFit" class="upper-button right-l" src="/icon/return.png" bindtap="onUndo"></image>
+      <image wx:if="{{step>0}}" mode="aspectFit" class="upper-button right-l" src="/icon/return.png" bindtap="onRevoke"></image>
       <image mode="aspectFit" class="upper-button left-s" src="/icon/close.png" bindtap="onClose"></image>
 </view>
 <!-- 画布 -->
 <view>
       <canvas canvas-id="myCanvas" class="myCanvas"
             style="width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{canvas_X}}px;top:{{canvas_Y}}px"
-            bindtouchstart="touchStart" bindtouchmove="touchMove"></canvas>
+            bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"></canvas>
       <canvas canvas-id="mask"
             style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
       <canvas canvas-id="sketch"

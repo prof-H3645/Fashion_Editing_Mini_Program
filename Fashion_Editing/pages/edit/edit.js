@@ -92,7 +92,6 @@ Page({
         mode: 2
       })
     if (index == 0) {
-      console.log('mask');
       this.popoverSize.onHide();
       this.popoverColor.onHide();
       this.setData({
@@ -100,7 +99,6 @@ Page({
         curSize: "10"
       });
     } else if (index == 1) {
-      console.log('sketch');
       this.popoverSize.onHide();
       this.popoverColor.onHide();
       this.setData({
@@ -175,7 +173,7 @@ Page({
     console.log(this.data.sketchDrawWorksPath);
     console.log(this.data.brushDrawWorksPath);
     var app = getApp();
-    app.globalData.outputPath = this.data.allDrawWorksPath.pop().path;
+    app.globalData.outputPath = this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path;
     wx.navigateTo({
       url: '/pages/output/output',
     })
@@ -195,7 +193,7 @@ Page({
     this.canvasContext.setLineCap('round')
     this.canvasContext.beginPath()
     if (this.data.mode == 0) { //蒙版，固定白色+中尺寸
-      this.maskCanvasContext.setStrokeStyle("#000")
+      this.maskCanvasContext.setStrokeStyle("#fff")
       this.maskCanvasContext.setLineWidth('10')
       this.maskCanvasContext.setLineCap('round')
       this.maskCanvasContext.beginPath()

@@ -65,5 +65,38 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  onSave: function(e){
+    wx.saveImageToPhotosAlbum({
+      filePath: this.data.outputPath,
+      success: function(res){
+        console.log("success!");
+        console.log(res);
+        wx.showModal({
+          title: '保存成功',
+          content: '图片成功保存到相册了，快与你的朋友分享吧',
+          showCancel: false,
+          confirmText: '好的',
+          confirmColor: '#07c160',
+        })
+      },
+      fail: function(res) {
+        console.log("fail!");
+        console.log(res);
+      }
+    })
+  },
+  onShare: function(e){
+    wx.showShareImageMenu({
+      path: this.data.outputPath,
+      success: function(res){
+        console.log("success!");
+        console.log(res);
+      },
+      fail: function(res) {
+        console.log("fail!");
+        console.log(res);
+      }
+    })
   }
 })

@@ -12,9 +12,8 @@
 
 .output {
   display: flex;
-  width: 80%;
   margin: 40rpx auto;
-
+  
 }
 
 .blank {

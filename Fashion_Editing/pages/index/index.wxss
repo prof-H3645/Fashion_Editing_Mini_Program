@@ -10,10 +10,7 @@
 }
 
 .uploader {
-  display: flex;
-  width: 300rpx;
-  height: 350rpx;
-  line-height: 300rpx;
+  display: block;
   text-align: center;
   border: 2px dashed #07c160;
   top: 150rpx;
@@ -24,9 +21,10 @@
 }
 
 .tips {
-  display: flex;
-  height: 450rpx;
-  line-height: 500rpx;
+  display: block;
+  margin: 50rpx auto;
+  text-align: center;
+  line-height: 300rpx;
   font-size: 14px;
   color: #999aaa;
   justify-content: center;

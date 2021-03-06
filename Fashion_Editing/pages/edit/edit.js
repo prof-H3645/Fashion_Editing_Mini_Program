@@ -6,13 +6,14 @@ Page({
    */
   data: {
     imgPath: '/images/test.jpg',
+    blackPath: '/images/black.jpg',
     mode: 1,
     canvas_X: 0,
     canvas_Y: 0,
     imgWidth: 0,
     imgHeight: 0,
-    screenWidth: 0,
-    screenHeight: 0,
+    windowWidth: 0,
+    windowHeight: 0,
     Dpr: 2,
     allDrawWorksPath: [],
     maskDrawWorksPath: [],
@@ -34,39 +35,51 @@ Page({
     const app = getApp();
     let imgWidth = app.globalData.imgWidth;
     let imgHeight = app.globalData.imgHeight;
+    let originalWidth =  app.globalData.imgWidth;
+    let originalHeight = app.globalData.imgHeight;
     let Dpr = app.globalData.Dpr;
-    let screenWidth = app.globalData.screenWidth - 10 * Dpr;
-    let screenHeight = app.globalData.screenHeight - 100 * Dpr;
+    let windowWidth = app.globalData.windowWidth - 5 * Dpr;
+    let windowHeight = app.globalData.windowHeight - 80 * Dpr;
     let per = 1.0;
-    while (per > 0.0 && (imgWidth >= screenWidth || imgHeight >= screenHeight)) {
-      per -= 0.05;
-      imgWidth = per * app.globalData.imgWidth;
-      imgHeight = per * app.globalData.imgHeight;
+    while (imgWidth <= windowWidth && imgHeight <= windowHeight) {
+      per += 0.1;
+      imgWidth = per * originalWidth;
+      imgHeight = per * originalHeight;
+      console.log("增");
+    }
+    while (imgWidth >= windowWidth || imgHeight >= windowHeight) {
+      per *= 0.95;
+      imgWidth = per * originalWidth;
+      imgHeight = per * originalHeight;
+      console.log("减");
     }
     this.setData({
       imgPath: app.globalData.imgPath,
       imgWidth: imgWidth,
       imgHeight: imgHeight,
-      canvas_X: 5 * Dpr + (screenWidth - imgWidth) / 2,
-      canvas_Y: 10 * Dpr + (screenHeight - imgHeight) / 2,
-      screenWidth: screenWidth,
-      screenHeight: screenHeight,
+      canvas_X: 2.5 * Dpr + (windowWidth - imgWidth) / 2,
+      canvas_Y: 5 * Dpr + (windowHeight - imgHeight) / 2,
+      windowWidth: windowWidth,
+      windowHeight: windowHeight,
       Dpr: Dpr
     })
 
-    if (imgWidth <= screenWidth && imgHeight <= screenHeight) {
+    if (imgWidth <= windowWidth && imgHeight <= windowHeight) {
       this.canvasContext.drawImage(this.data.imgPath, 0, 0, imgWidth, imgHeight)
     } else {
-      this.canvasContext.drawImage(this.data.imgPath, 0, 0, screenWidth, screenWidth)
+      this.canvasContext.drawImage(this.data.imgPath, 0, 0, windowWidth, windowWidth)
     }
-    this.maskCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.maskCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
     this.maskCanvasContext.draw();
-    this.brushCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.brushCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
     this.brushCanvasContext.draw();
-    this.sketchCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.sketchCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
     this.sketchCanvasContext.draw();
     this.canvasContext.draw();
-    this.data.allDrawWorksPath.push({mode:3,path:this.data.imgPath})
+    this.data.allDrawWorksPath.push({mode:3,path:this.data.imgPath});
+    this.data.maskDrawWorksPath.push(this.data.blackPath);
+    this.data.sketchDrawWorksPath.push(this.data.blackPath);
+    this.data.brushDrawWorksPath.push(this.data.blackPath);
     this.setData({
       curColor: "#000",
       curSize: "4"
@@ -151,17 +164,17 @@ Page({
 
     if (mode == 0) {
       this.data.maskDrawWorksPath.pop();
-      this.maskCanvasContext.drawImage(this.data.maskDrawWorksPath.indexOf(this.data.maskDrawWorksPath.length - 1), 0, 0, imgWidth, imgHeight);
+      this.maskCanvasContext.drawImage(this.data.maskDrawWorksPath[this.data.maskDrawWorksPath.length - 1], 0, 0, imgWidth, imgHeight);
       this.maskCanvasContext.draw();
 
     } else if (mode == 1) {
       this.data.sketchDrawWorksPath.pop();
-      this.sketchCanvasContext.drawImage(this.data.sketchDrawWorksPath.indexOf(this.data.sketchDrawWorksPath.length - 1), 0, 0, imgWidth, imgHeight);
+      this.sketchCanvasContext.drawImage(this.data.sketchDrawWorksPath[this.data.sketchDrawWorksPath.length - 1], 0, 0, imgWidth, imgHeight);
       this.sketchCanvasContext.draw();
 
     } else if (mode == 2) {
       this.data.brushDrawWorksPath.pop();
-      this.brushCanvasContext.drawImage(this.data.brushDrawWorksPath.indexOf(this.data.brushDrawWorksPath.length - 1), 0, 0, imgWidth, imgHeight);
+      this.brushCanvasContext.drawImage(this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length - 1], 0, 0, imgWidth, imgHeight);
       this.brushCanvasContext.draw();
       
     }

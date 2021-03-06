@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view>
   <view class="info">时尚编辑，用画笔描绘出你的时尚！</view>
-  <button class="uploader" bindtap="handleChooseAlbum">+</button>
-  <text class="tips">点击上传图片</text>
+  <button class="uploader" style="width:{{width}}px;height:{{width}}px;line-height:{{width}}px" bindtap="handleChooseAlbum">+</button>
+  <view class="tips">点击上传图片</view>
 </view>

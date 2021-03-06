@@ -31,9 +31,9 @@
   right: 90rpx;
 }
 
-.myCanvas{
+/* .myCanvas{
   border: 1px solid #666;
-}
+} */
 
 .color-item{
   width: 60%;

@@ -11,11 +11,11 @@
             style="width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{canvas_X}}px;top:{{canvas_Y}}px"
             bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"></canvas>
       <canvas canvas-id="mask"
-            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
+            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
       <canvas canvas-id="sketch"
-            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
+            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
       <canvas canvas-id="brush"
-            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{screenWidth+50}}px;top:{{screenHeight+200}}px"></canvas>
+            style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
 </view>
 
 <!-- 下层工具栏 -->
@@ -38,7 +38,7 @@
 </view>
 
 <!-- 弹框 -->
-<popover id="size" pw="{{20 * Dpr}}" px="{{(screenWidth - 10) * 5 / 8}}" py="{{screenHeight - 80/Dpr}}" vertical="top"
+<popover id="size" pw="{{20 * Dpr}}" px="{{(windowWidth - 10) * 5 / 8}}" py="{{windowHeight - 80/Dpr}}" vertical="top"
       align="center">
       <popover-item height="{{20 * Dpr}}">
             <view class="{{curSize == '4' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="4">细</view>
@@ -53,7 +53,7 @@
       </popover-item>
 </popover>
 
-<popover id="color" pw="{{20 * Dpr}}" px="{{(screenWidth - 7) * 7 / 8 }}" py="{{screenHeight - 80 / Dpr - 160}}"
+<popover id="color" pw="{{20 * Dpr}}" px="{{(windowWidth - 7) * 7 / 8 }}" py="{{windowHeight - 80 / Dpr - 160}}"
       vertical="top" align="center">
       <popover-item height="{{20 * Dpr}}">
             <view class="{{ curColor == '#d71345' ? 'color-item-cur' : 'color-item'}}" style="background-color:#d71345"

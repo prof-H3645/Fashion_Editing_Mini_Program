@@ -6,7 +6,10 @@ Page({
   data: {
     files: [
 
-    ]
+    ],
+    windowWidth: 375,
+    windowHeight: 603,
+    Dpr: 2,
   },
 
   handleChooseAlbum() {
@@ -48,6 +51,17 @@ Page({
     })
   },
   onLoad() {
+    var app = getApp();
+    let Dpr = app.globalData.Dpr;
+    let windowWidth = app.globalData.windowWidth;
+    let windowHeight = app.globalData.windowHeight;
+    this.setData({
+      windowWidth: windowWidth,
+      windowHeight: windowHeight,
+      Dpr: Dpr,
+      width: windowWidth* 0.55
+    })
+    
   },
   chooseImage: function (e) {
     var that = this;

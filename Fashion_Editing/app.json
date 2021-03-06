@@ -1,9 +1,9 @@
 {
   "pages":[
-    "pages/output/output",
-    "pages/edit/edit",
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/edit/edit",
+    "pages/logs/logs",
+    "pages/output/output"
   ],
   "window":{
     "backgroundTextStyle":"light",

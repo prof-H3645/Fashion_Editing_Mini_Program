@@ -6,6 +6,10 @@ Page({
    */
   data: {
     outputPath: '',
+    originalPath:'',
+    maskPath:'',
+    sketchPath:'',
+    brushPath:''
   },
 
   /**
@@ -14,7 +18,10 @@ Page({
   onLoad: function (options) {
     var app = getApp();
     this.setData({
-      outputPath : app.globalData.outputPath
+      outputPath : app.globalData.outputPath,
+      maskPath:app.globalData.maskPath,
+      sketchPath:app.globalData.sketchPath,
+      brushPath:app.globalData.brushPath
     })
   },
 
@@ -96,6 +103,45 @@ Page({
       fail: function(res) {
         console.log("fail!");
         console.log(res);
+      }
+    })
+  },
+  onGenerate:function(){
+    var Original64 = wx.getFileSystemManager().readFileSync('images/test.jpg',"base64")
+    var Mask64 = wx.getFileSystemManager().readFileSync('images/mask.png',"base64")
+    var Sketch64 = wx.getFileSystemManager().readFileSync('images/sketch.ong',"base64")
+    var Stroke64 = wx.getFileSystemManager().readFileSync('images/stroke.png',"base64")
+
+    wx.request({
+      url: 'https://gpu193.mistgpu.xyz:30324/generate',
+      data:{
+        "data":{
+          "original":Original64,
+          "mask":Mask64,
+          "sketch":Sketch64,
+          "stroke":Stroke64
+        }
+      },
+      header:{
+        'content-type':'application/json'
+      },
+      method:'POST',
+      success(res){
+        console.log(res.data)
+      },
+      fail(res){
+        console.log(res.data)
+      }
+    })
+  },
+  onDownload:function(){
+    wx.downloadFile({
+      url: '',
+      success(res){
+        console.log(res.tempFilePath)
+      },
+      fail(res){
+        console.log(res)
       }
     })
   }

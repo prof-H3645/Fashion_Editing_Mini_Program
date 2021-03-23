@@ -3,10 +3,17 @@
 <image class="output" mode="heightFix" src="{{outputPath}}"></image>
 <view class="info"><text>快分享给你的朋友吧！</text></view>
 <view class="weui-btn-area_inline">
-  <button style="width:33%" class="weui-btn_inline" type="primary" bindtap="onShare">
+  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onGenerate">
+    <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 生成
+  </button> 
+  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onDownload">
+    <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 下载
+  </button>
+
+  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onShare">
     <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 分享
   </button>
-  <button style="width:33%" class="weui-btn_inline" type="primary" bindtap="onSave">
+  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onSave">
     <icon style="margin-top: -8rpx;" class="iconfont icon-save"></icon> 保存
   </button>
 </view>

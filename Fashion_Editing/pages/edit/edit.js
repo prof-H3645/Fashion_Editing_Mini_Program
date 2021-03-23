@@ -173,7 +173,21 @@ Page({
     console.log(this.data.sketchDrawWorksPath);
     console.log(this.data.brushDrawWorksPath);
     var app = getApp();
+    var tmpOutputPath=this.data.allDrawWorksPath.pop().path
+    var tmpMaskPath = this.data.maskDrawWorksPath.pop()
+    var tmpSketchPath = this.data.sketchDrawWorksPath.pop()
+    var tmpBrushPath = this.data.brushDrawWorksPath.pop()
+
     app.globalData.outputPath = this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path;
+    app.globalData.maskPath = tmpMaskPath
+    app.globalData.brushPath = tmpBrushPath
+    app.globalData.sketchPath = tmpSketchPath
+
+    console.log("outputPath",tmpOutputPath)
+    console.log("maskPath",tmpMaskPath)
+    console.log("sketchPath",tmpSketchPath)
+    console.log("brushPath",tmpBrushPath)
+
     wx.navigateTo({
       url: '/pages/output/output',
     })

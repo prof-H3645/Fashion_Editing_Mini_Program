@@ -4,7 +4,7 @@
     "ignore": []
   },
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": true,
     "enhance": false,
     "postcss": true,
@@ -23,7 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
-    "useApiHostProcess": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -41,7 +41,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.15.0",
-  "appid": "wxa7998de9afda0bfc",
+  "appid": "wxb8dd63cb2da8d635",
   "projectname": "Fashion_Editing",
   "debugOptions": {
     "hidedInDevtools": []

@@ -35,12 +35,15 @@ Page({
     const app = getApp();
     let imgWidth = app.globalData.imgWidth;
     let imgHeight = app.globalData.imgHeight;
-    let originalWidth =  app.globalData.imgWidth;
+    let originalWidth = app.globalData.imgWidth;
     let originalHeight = app.globalData.imgHeight;
     let Dpr = app.globalData.Dpr;
     let windowWidth = app.globalData.windowWidth - 5 * Dpr;
     let windowHeight = app.globalData.windowHeight - 80 * Dpr;
     let per = 1.0;
+    console.log(app.globalData.windowWidth);
+    console.log(app.globalData.windowHeight);
+    console.log(windowHeight);
     while (imgWidth <= windowWidth && imgHeight <= windowHeight) {
       per += 0.1;
       imgWidth = per * originalWidth;
@@ -63,7 +66,8 @@ Page({
       windowHeight: windowHeight,
       Dpr: Dpr
     })
-
+    console.log(imgWidth);
+    console.log(imgHeight);
     if (imgWidth <= windowWidth && imgHeight <= windowHeight) {
       this.canvasContext.drawImage(this.data.imgPath, 0, 0, imgWidth, imgHeight)
     } else {
@@ -76,7 +80,10 @@ Page({
     this.sketchCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
     this.sketchCanvasContext.draw();
     this.canvasContext.draw();
-    this.data.allDrawWorksPath.push({mode:3,path:this.data.imgPath});
+    this.data.allDrawWorksPath.push({
+      mode: 3,
+      path: this.data.imgPath
+    });
     this.data.maskDrawWorksPath.push(this.data.blackPath);
     this.data.sketchDrawWorksPath.push(this.data.blackPath);
     this.data.brushDrawWorksPath.push(this.data.blackPath);
@@ -158,8 +165,8 @@ Page({
     console.log(this.data.step);
     var mode = this.data.allDrawWorksPath.pop().mode;
     console.log(mode);
-    console.log(this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1]);
-    this.canvasContext.drawImage(this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path, 0, 0, imgWidth, imgHeight);
+    console.log(this.data.allDrawWorksPath[this.data.allDrawWorksPath.length - 1]);
+    this.canvasContext.drawImage(this.data.allDrawWorksPath[this.data.allDrawWorksPath.length - 1].path, 0, 0, imgWidth, imgHeight);
     this.canvasContext.draw();
 
     if (mode == 0) {
@@ -176,7 +183,7 @@ Page({
       this.data.brushDrawWorksPath.pop();
       this.brushCanvasContext.drawImage(this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length - 1], 0, 0, imgWidth, imgHeight);
       this.brushCanvasContext.draw();
-      
+
     }
   },
   onGenerate(e) {
@@ -185,21 +192,55 @@ Page({
     console.log(this.data.maskDrawWorksPath);
     console.log(this.data.sketchDrawWorksPath);
     console.log(this.data.brushDrawWorksPath);
-    var app = getApp();
-    var tmpOutputPath=this.data.allDrawWorksPath.pop().path
-    var tmpMaskPath = this.data.maskDrawWorksPath.pop()
-    var tmpSketchPath = this.data.sketchDrawWorksPath.pop()
-    var tmpBrushPath = this.data.brushDrawWorksPath.pop()
+    const app = getApp();
+    const self = this;
+    var tmpOutputPath = this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path
+    var tmpMaskPath = this.data.maskDrawWorksPath[this.data.maskDrawWorksPath.length-1]
+    var tmpSketchPath = this.data.sketchDrawWorksPath[this.data.sketchDrawWorksPath.length-1]
+    var tmpBrushPath = this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length-1]
+    wx.saveFile({
+      tempFilePath: tmpOutputPath,
+      success(res) {
+        self.setData({
+          outputPath: res.savedFilePath
+        })
+        app.globalData.outputPath = res.savedFilePath
+        console.log("lala1");
+      }
+    })
+    wx.saveFile({
+      tempFilePath: tmpMaskPath,
+      success(res) {
+        self.setData({
+          maskPath: res.savedFilePath
+        })
+        console.log("lala2");
+        app.globalData.maskPath = res.savedFilePath
 
-    app.globalData.outputPath = this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path;
-    app.globalData.maskPath = tmpMaskPath
-    app.globalData.brushPath = tmpBrushPath
-    app.globalData.sketchPath = tmpSketchPath
+      }
+    })
+    wx.saveFile({
+      tempFilePath: tmpSketchPath,
+      success(res) {
+        self.setData({
+          sketchPath: res.savedFilePath
+        })
+        console.log("lala3");
+        app.globalData.sketchPath = res.savedFilePath
 
-    console.log("outputPath",tmpOutputPath)
-    console.log("maskPath",tmpMaskPath)
-    console.log("sketchPath",tmpSketchPath)
-    console.log("brushPath",tmpBrushPath)
+      }
+    })
+    wx.saveFile({
+      tempFilePath: tmpBrushPath,
+      success(res) {
+        self.setData({
+          brushPath: res.savedFilePath
+        })
+        console.log("lala4");
+        app.globalData.brushPath = res.savedFilePath
+
+      }
+    })
 
     wx.navigateTo({
       url: '/pages/output/output',

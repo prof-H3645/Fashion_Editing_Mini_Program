@@ -59,7 +59,7 @@ Page({
       windowWidth: windowWidth,
       windowHeight: windowHeight,
       Dpr: Dpr,
-      width: windowWidth* 0.55
+      width: windowWidth* 0.50
     })
     
   },

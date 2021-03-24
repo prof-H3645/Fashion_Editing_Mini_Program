@@ -6,23 +6,63 @@ Page({
    */
   data: {
     outputPath: '',
-    originalPath:'',
-    maskPath:'',
-    sketchPath:'',
-    brushPath:''
+    originalPath: '',
+    maskPath: '',
+    sketchPath: '',
+    brushPath: '',
+    loading: true,
+    error: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var app = getApp();
+    const app = getApp();
+    const self = this;
     this.setData({
-      outputPath : app.globalData.outputPath,
-      maskPath:app.globalData.maskPath,
-      sketchPath:app.globalData.sketchPath,
-      brushPath:app.globalData.brushPath
+      outputPath: app.globalData.outputPath,
+      maskPath: app.globalData.maskPath,
+      sketchPath: app.globalData.sketchPath,
+      brushPath: app.globalData.brushPath
     })
+    var timeoutID = setTimeout(function(){
+      self.setData({
+        loading: false,
+        error: true
+      })
+    },2000)
+    var Original64 = wx.getFileSystemManager().readFileSync(app.globalData.outputPath, "base64")
+    var Mask64 = wx.getFileSystemManager().readFileSync(app.globalData.maskPath, "base64")
+    var Sketch64 = wx.getFileSystemManager().readFileSync(app.globalData.sketchPath, "base64")
+    var Stroke64 = wx.getFileSystemManager().readFileSync(app.globalData.brushPath, "base64")
+    wx.request({
+      url: 'http://mist@ygg.mistgpu.xyz:60504/generate',
+      data: {
+        "data": {
+          "original": Original64,
+          "mask": Mask64,
+          "sketch": Sketch64,
+          "stroke": Stroke64
+        }
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+      success(res) {
+        console.log(res.data)
+        self.setData({
+          outputPath: res.data,
+          loading: false
+        }),
+        clearTimeout(timeoutID)
+      },
+      fail(res) {
+        console.log(res.data);
+      }
+    })
+
   },
 
   /**
@@ -73,10 +113,10 @@ Page({
   onShareAppMessage: function () {
 
   },
-  onSave: function(e){
+  onSave: function (e) {
     wx.saveImageToPhotosAlbum({
       filePath: this.data.outputPath,
-      success: function(res){
+      success: function (res) {
         console.log("success!");
         console.log(res);
         wx.showModal({
@@ -87,62 +127,62 @@ Page({
           confirmColor: '#07c160',
         })
       },
-      fail: function(res) {
+      fail: function (res) {
         console.log("fail!");
         console.log(res);
       }
     })
   },
-  onShare: function(e){
+  onShare: function (e) {
     wx.showShareImageMenu({
       path: this.data.outputPath,
-      success: function(res){
+      success: function (res) {
         console.log("success!");
         console.log(res);
       },
-      fail: function(res) {
+      fail: function (res) {
         console.log("fail!");
         console.log(res);
       }
     })
   },
-  onGenerate:function(){
-    var Original64 = wx.getFileSystemManager().readFileSync('images/test.jpg',"base64")
-    var Mask64 = wx.getFileSystemManager().readFileSync('images/mask.png',"base64")
-    var Sketch64 = wx.getFileSystemManager().readFileSync('images/sketch.ong',"base64")
-    var Stroke64 = wx.getFileSystemManager().readFileSync('images/stroke.png',"base64")
-
+  onGenerate: function () {
+    var Original64 = wx.getFileSystemManager().readFileSync('images/test.jpg', "base64")
+    var Mask64 = wx.getFileSystemManager().readFileSync('images/mask.png', "base64")
+    var Sketch64 = wx.getFileSystemManager().readFileSync('images/sketch.png', "base64")
+    var Stroke64 = wx.getFileSystemManager().readFileSync('images/stroke.png', "base64")
+    console.log(Original64);
     wx.request({
       url: 'https://gpu193.mistgpu.xyz:30324/generate',
-      data:{
-        "data":{
-          "original":Original64,
-          "mask":Mask64,
-          "sketch":Sketch64,
-          "stroke":Stroke64
+      data: {
+        "data": {
+          "original": Original64,
+          "mask": Mask64,
+          "sketch": Sketch64,
+          "stroke": Stroke64
         }
       },
-      header:{
-        'content-type':'application/json'
+      header: {
+        'content-type': 'application/json'
       },
-      method:'POST',
-      success(res){
+      method: 'POST',
+      success(res) {
         console.log(res.data)
       },
-      fail(res){
+      fail(res) {
         console.log(res.data)
       }
     })
   },
-  onDownload:function(){
-    wx.downloadFile({
-      url: '',
-      success(res){
-        console.log(res.tempFilePath)
-      },
-      fail(res){
-        console.log(res)
-      }
-    })
-  }
+  // onDownload:function(){
+  //   wx.downloadFile({
+  //     url: '',
+  //     success(res){
+  //       console.log(res.tempFilePath)
+  //     },
+  //     fail(res){
+  //       console.log(res)
+  //     }
+  //   })
+  // }
 })

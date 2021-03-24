@@ -1,20 +1,24 @@
 <!--pages/output/output.wxml-->
-<view class="info"><text>完成!</text></view>
-<image style="height:650rpx" class="output" mode="aspectFit" src="{{outputPath}}"></image>
-<view class="info"><text>快分享给你的朋友吧！</text></view>
-<view class="weui-btn-area_inline">
-  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onGenerate">
+<mp-loading style="color:#07c160" type="circle" tips="正在生成，请稍等" show="{{loading}}"></mp-loading>
+<view class="info" wx:if="{{error}}">很抱歉，出错了</view>
+<view wx:if="{{!loading&&!error}}">
+  <view class="info"><text>完成!</text></view>
+  <image style="height:650rpx" class="output" mode="aspectFit" src="{{outputPath}}"></image>
+  <view class="info"><text>快分享给你的朋友吧！</text></view>
+  <view class="weui-btn-area_inline">
+    <!-- <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onGenerate">
     <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 生成
   </button> 
   <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onDownload">
     <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 下载
-  </button>
+  </button> -->
 
-  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onShare">
-    <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 分享
-  </button>
-  <button style="width:20%" class="weui-btn_inline" type="primary" bindtap="onSave">
-    <icon style="margin-top: -8rpx;" class="iconfont icon-save"></icon> 保存
-  </button>
+    <button style="width:33%" class="weui-btn_inline" type="primary" bindtap="onShare">
+      <icon style="margin-top: -8rpx;" class="iconfont icon-share"></icon> 分享
+    </button>
+    <button style="width:33%" class="weui-btn_inline" type="primary" bindtap="onSave">
+      <icon style="margin-top: -8rpx;" class="iconfont icon-save"></icon> 保存
+    </button>
+  </view>
+  <view class="blank"></view>
 </view>
-<view class="blank"></view>

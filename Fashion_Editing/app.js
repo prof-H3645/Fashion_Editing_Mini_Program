@@ -4,8 +4,8 @@ App({
     var that = this;
     wx.getSystemInfo({
       success: (result) => {
-        that.globalData.windowWidth = result.windowWidth;
-        that.globalData.windowHeight = result.windowHeight;        
+        that.globalData.windowWidth = result.screenWidth;
+        that.globalData.windowHeight = result.screenHeight;        
         that.globalData.Dpr = result.pixelRatio;
         // var clientHeight = result.windowHeight,
         //   clientWidth = result.windowWidth,

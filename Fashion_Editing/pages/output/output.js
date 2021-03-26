@@ -26,20 +26,21 @@ Page({
       sketchPath: app.globalData.sketchPath,
       brushPath: app.globalData.brushPath
     })
-    var timeoutID = setTimeout(function(){
+    var timeoutID = setTimeout(function () {
       self.setData({
         loading: false,
         error: true
       })
-    },2000)
+    }, 5000)
     var Original64 = wx.getFileSystemManager().readFileSync(app.globalData.outputPath, "base64")
     var Mask64 = wx.getFileSystemManager().readFileSync(app.globalData.maskPath, "base64")
     var Sketch64 = wx.getFileSystemManager().readFileSync(app.globalData.sketchPath, "base64")
     var Stroke64 = wx.getFileSystemManager().readFileSync(app.globalData.brushPath, "base64")
     wx.request({
-      url: 'http://mist@ygg.mistgpu.xyz:60504/generate',
+      url: 'http://mist@gpu82.mistgpu.xyz:30524/generate',
       data: {
         "data": {
+          "name": "new_model_easy233",
           "original": Original64,
           "mask": Mask64,
           "sketch": Sketch64,
@@ -52,11 +53,25 @@ Page({
       method: 'POST',
       success(res) {
         console.log(res.data)
-        self.setData({
-          outputPath: res.data,
-          loading: false
-        }),
-        clearTimeout(timeoutID)
+          clearTimeout(timeoutID)
+          wx.downloadFile({
+            url: "http://" + res.data.result,
+            // filePath: wx.env.USER_DATA_PATH+'/images/result.png',
+            header: {
+              'content-type': 'image/png'
+            },
+            success(res) {
+              console.log(res.tempFilePath);
+              self.setData({
+                outputPath: res.tempFilePath,
+                loading: false
+              })
+              console.log("成功啦" + res.statusCode);
+            },
+            fail(res) {
+              console.log(res);
+            }
+          })
       },
       fail(res) {
         console.log(res.data);

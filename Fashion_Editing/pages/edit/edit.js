@@ -6,7 +6,7 @@ Page({
    */
   data: {
     imgPath: '/images/test.jpg',
-    blackPath: '/images/black.jpg',
+    blackPath: '/images/black.png',
     mode: 1,
     canvas_X: 0,
     canvas_Y: 0,
@@ -22,6 +22,10 @@ Page({
     curColor: "#000",
     curSize: "4",
     step: 0,
+    originFinish: false,
+    maskFinish: false,
+    sketchFinish: false,
+    brushFinish: false,
   },
   penConfig: {
     color: "#d71345",
@@ -41,6 +45,7 @@ Page({
     let windowWidth = app.globalData.windowWidth - 5 * Dpr;
     let windowHeight = app.globalData.windowHeight - 80 * Dpr;
     let per = 1.0;
+    const self = this;
     console.log(app.globalData.windowWidth);
     console.log(app.globalData.windowHeight);
     console.log(windowHeight);
@@ -75,21 +80,35 @@ Page({
     }
     this.maskCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
     this.maskCanvasContext.draw();
-    this.brushCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
-    this.brushCanvasContext.draw();
+    this.brushCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.brushCanvasContext.draw(false, function(){
+      wx.canvasToTempFilePath({
+        canvasId: "brush",
+        success: function (res) {
+          self.setData({
+            blackPath: res.tempFilePath
+          })
+          console.log("hahahahha");
+          self.data.maskDrawWorksPath.push(res.tempFilePath);
+          self.data.sketchDrawWorksPath.push(res.tempFilePath);
+          self.data.brushDrawWorksPath.push(res.tempFilePath);
+        },
+        fail: res => {
+          console.log('获取画布图片失败', res);
+        },
+      }, this)
+    });
     this.sketchCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
     this.sketchCanvasContext.draw();
+
     this.canvasContext.draw();
     this.data.allDrawWorksPath.push({
       mode: 3,
       path: this.data.imgPath
     });
-    this.data.maskDrawWorksPath.push(this.data.blackPath);
-    this.data.sketchDrawWorksPath.push(this.data.blackPath);
-    this.data.brushDrawWorksPath.push(this.data.blackPath);
     this.setData({
       curColor: "#000",
-      curSize: "4"
+      curSize: "0.5"
     });
   },
 
@@ -123,7 +142,7 @@ Page({
       this.popoverColor.onHide();
       this.setData({
         curColor: "#000",
-        curSize: "4"
+        curSize: "0.5"
       });
     } else if (index == 2) {
       this.setData({
@@ -194,15 +213,16 @@ Page({
     console.log(this.data.brushDrawWorksPath);
     const app = getApp();
     const self = this;
-    var tmpOutputPath = this.data.allDrawWorksPath[this.data.allDrawWorksPath.length-1].path
-    var tmpMaskPath = this.data.maskDrawWorksPath[this.data.maskDrawWorksPath.length-1]
-    var tmpSketchPath = this.data.sketchDrawWorksPath[this.data.sketchDrawWorksPath.length-1]
-    var tmpBrushPath = this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length-1]
+    var originalPath = this.data.imgPath;
+    var tmpMaskPath = this.data.maskDrawWorksPath[this.data.maskDrawWorksPath.length-1];
+    var tmpSketchPath = this.data.sketchDrawWorksPath[this.data.sketchDrawWorksPath.length-1];
+    var tmpBrushPath = this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length-1];
     wx.saveFile({
-      tempFilePath: tmpOutputPath,
+      tempFilePath: originalPath,
       success(res) {
         self.setData({
-          outputPath: res.savedFilePath
+          outputPath: res.savedFilePath,
+          originFinish: true,
         })
         app.globalData.outputPath = res.savedFilePath
         console.log("lala1");
@@ -212,7 +232,8 @@ Page({
       tempFilePath: tmpMaskPath,
       success(res) {
         self.setData({
-          maskPath: res.savedFilePath
+          maskPath: res.savedFilePath,
+          maskFinish: true,
         })
         console.log("lala2");
         app.globalData.maskPath = res.savedFilePath
@@ -223,7 +244,8 @@ Page({
       tempFilePath: tmpSketchPath,
       success(res) {
         self.setData({
-          sketchPath: res.savedFilePath
+          sketchPath: res.savedFilePath,
+          sketchFinish: true,
         })
         console.log("lala3");
         app.globalData.sketchPath = res.savedFilePath
@@ -234,17 +256,21 @@ Page({
       tempFilePath: tmpBrushPath,
       success(res) {
         self.setData({
-          brushPath: res.savedFilePath
+          brushPath: res.savedFilePath,
+          brushFinish: true,
         })
         console.log("lala4");
         app.globalData.brushPath = res.savedFilePath
 
       }
     })
-
-    wx.navigateTo({
-      url: '/pages/output/output',
-    })
+    // setInterval(function(){
+      if (self.data.originFinish && self.data.maskFinish && self.data.brushFinish && self.data.sketchFinish) {
+        wx.navigateTo({
+          url: '/pages/output/output',
+        })
+      }
+    // },500);
   },
   /**
    * 开始画笔
@@ -267,7 +293,7 @@ Page({
       this.maskCanvasContext.beginPath()
     } else if (this.data.mode == 1) { //素描，由于黑色背景，所以固定白色+细尺寸
       this.sketchCanvasContext.setStrokeStyle("#fff")
-      this.sketchCanvasContext.setLineWidth('4')
+      this.sketchCanvasContext.setLineWidth('0.5')
       this.sketchCanvasContext.setLineCap('round')
       this.sketchCanvasContext.beginPath()
     } else if (this.data.mode == 2) { //画笔，普通彩色

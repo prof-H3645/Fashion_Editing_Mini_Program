@@ -7,8 +7,10 @@
 }
 
 .upper-button {
-  width: 80rpx;
-  height: 80rpx;
+  /* width: 80rpx;
+  height: 80rpx; */
+  font-size: 70rpx;
+  line-height: 70rpx;
   margin-top: 10rpx;
   margin-right: 30rpx;
 }

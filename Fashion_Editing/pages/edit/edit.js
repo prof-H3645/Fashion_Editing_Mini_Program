@@ -18,14 +18,14 @@ Page({
     allDrawWorksPath: [],
     maskDrawWorksPath: [],
     sketchDrawWorksPath: [],
-    brushDrawWorksPath: [],
+    strokeDrawWorksPath: [],
     curColor: "#000",
     curSize: "4",
     step: 0,
     originFinish: false,
     maskFinish: false,
     sketchFinish: false,
-    brushFinish: false,
+    strokeFinish: false,
   },
   penConfig: {
     color: "#d71345",
@@ -35,7 +35,7 @@ Page({
     this.canvasContext = wx.createCanvasContext("myCanvas");
     this.maskCanvasContext = wx.createCanvasContext("mask");
     this.sketchCanvasContext = wx.createCanvasContext("sketch");
-    this.brushCanvasContext = wx.createCanvasContext("brush");
+    this.strokeCanvasContext = wx.createCanvasContext("stroke");
     const app = getApp();
     let imgWidth = app.globalData.imgWidth;
     let imgHeight = app.globalData.imgHeight;
@@ -78,29 +78,48 @@ Page({
     } else {
       this.canvasContext.drawImage(this.data.imgPath, 0, 0, windowWidth, windowWidth)
     }
-    this.maskCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
-    this.maskCanvasContext.draw();
-    this.brushCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
-    this.brushCanvasContext.draw(false, function(){
+    this.maskCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.maskCanvasContext.draw(false, function(){
       wx.canvasToTempFilePath({
-        canvasId: "brush",
+        canvasId: "mask",
         success: function (res) {
           self.setData({
             blackPath: res.tempFilePath
           })
-          console.log("hahahahha");
+          console.log("hahahahha1");
           self.data.maskDrawWorksPath.push(res.tempFilePath);
-          self.data.sketchDrawWorksPath.push(res.tempFilePath);
-          self.data.brushDrawWorksPath.push(res.tempFilePath);
         },
         fail: res => {
           console.log('获取画布图片失败', res);
         },
       }, this)
     });
-    this.sketchCanvasContext.drawImage(this.data.blackPath, 0, 0, imgWidth, imgHeight)
-    this.sketchCanvasContext.draw();
-
+    this.strokeCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.strokeCanvasContext.draw(false, function(){
+      wx.canvasToTempFilePath({
+        canvasId: "stroke",
+        success: function (res) {
+          console.log("hahahahha3");
+          self.data.strokeDrawWorksPath.push(res.tempFilePath);
+        },
+        fail: res => {
+          console.log('获取画布图片失败', res);
+        },
+      }, this)
+    });
+    this.sketchCanvasContext.fillRect(0, 0, imgWidth, imgHeight)
+    this.sketchCanvasContext.draw(false, function(){
+      wx.canvasToTempFilePath({
+        canvasId: "sketch",
+        success: function (res) {
+          console.log("hahahahha2");
+          self.data.sketchDrawWorksPath.push(res.tempFilePath);
+        },
+        fail: res => {
+          console.log('获取画布图片失败', res);
+        },
+      }, this)
+    });
     this.canvasContext.draw();
     this.data.allDrawWorksPath.push({
       mode: 3,
@@ -199,9 +218,9 @@ Page({
       this.sketchCanvasContext.draw();
 
     } else if (mode == 2) {
-      this.data.brushDrawWorksPath.pop();
-      this.brushCanvasContext.drawImage(this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length - 1], 0, 0, imgWidth, imgHeight);
-      this.brushCanvasContext.draw();
+      this.data.strokeDrawWorksPath.pop();
+      this.strokeCanvasContext.drawImage(this.data.strokeDrawWorksPath[this.data.strokeDrawWorksPath.length - 1], 0, 0, imgWidth, imgHeight);
+      this.strokeCanvasContext.draw();
 
     }
   },
@@ -210,13 +229,13 @@ Page({
     console.log(this.data.allDrawWorksPath);
     console.log(this.data.maskDrawWorksPath);
     console.log(this.data.sketchDrawWorksPath);
-    console.log(this.data.brushDrawWorksPath);
+    console.log(this.data.strokeDrawWorksPath);
     const app = getApp();
     const self = this;
     var originalPath = this.data.imgPath;
     var tmpMaskPath = this.data.maskDrawWorksPath[this.data.maskDrawWorksPath.length-1];
     var tmpSketchPath = this.data.sketchDrawWorksPath[this.data.sketchDrawWorksPath.length-1];
-    var tmpBrushPath = this.data.brushDrawWorksPath[this.data.brushDrawWorksPath.length-1];
+    var tmpstrokePath = this.data.strokeDrawWorksPath[this.data.strokeDrawWorksPath.length-1];
     wx.saveFile({
       tempFilePath: originalPath,
       success(res) {
@@ -253,19 +272,19 @@ Page({
       }
     })
     wx.saveFile({
-      tempFilePath: tmpBrushPath,
+      tempFilePath: tmpstrokePath,
       success(res) {
         self.setData({
-          brushPath: res.savedFilePath,
-          brushFinish: true,
+          strokePath: res.savedFilePath,
+          strokeFinish: true,
         })
         console.log("lala4");
-        app.globalData.brushPath = res.savedFilePath
+        app.globalData.strokePath = res.savedFilePath
 
       }
     })
     // setInterval(function(){
-      if (self.data.originFinish && self.data.maskFinish && self.data.brushFinish && self.data.sketchFinish) {
+      if (self.data.originFinish && self.data.maskFinish && self.data.strokeFinish && self.data.sketchFinish) {
         wx.navigateTo({
           url: '/pages/output/output',
         })
@@ -297,10 +316,10 @@ Page({
       this.sketchCanvasContext.setLineCap('round')
       this.sketchCanvasContext.beginPath()
     } else if (this.data.mode == 2) { //画笔，普通彩色
-      this.brushCanvasContext.setStrokeStyle(this.penConfig.color)
-      this.brushCanvasContext.setLineWidth(this.penConfig.fontSize)
-      this.brushCanvasContext.setLineCap('round')
-      this.brushCanvasContext.beginPath()
+      this.strokeCanvasContext.setStrokeStyle(this.penConfig.color)
+      this.strokeCanvasContext.setLineWidth(this.penConfig.fontSize)
+      this.strokeCanvasContext.setLineCap('round')
+      this.strokeCanvasContext.beginPath()
     }
   },
 
@@ -324,9 +343,9 @@ Page({
       this.sketchCanvasContext.lineTo(tmpX, tmpY)
       this.sketchCanvasContext.stroke()
     } else if (this.data.mode == 2) {
-      this.brushCanvasContext.moveTo(this.startX, this.startY)
-      this.brushCanvasContext.lineTo(tmpX, tmpY)
-      this.brushCanvasContext.stroke()
+      this.strokeCanvasContext.moveTo(this.startX, this.startY)
+      this.strokeCanvasContext.lineTo(tmpX, tmpY)
+      this.strokeCanvasContext.stroke()
     }
     this.startX = tmpX
     this.startY = tmpY
@@ -352,9 +371,9 @@ Page({
       })
     } else if (this.data.mode == 2) {
       wx.drawCanvas({
-        canvasId: 'brush',
+        canvasId: 'stroke',
         reserve: true,
-        actions: this.brushCanvasContext.getActions()
+        actions: this.strokeCanvasContext.getActions()
       })
     }
   },
@@ -405,9 +424,9 @@ Page({
       }, this)
     } else if (this.data.mode == 2) {
       wx.canvasToTempFilePath({
-        canvasId: "brush",
+        canvasId: "stroke",
         success: function (res) {
-          self.data.brushDrawWorksPath.push(res.tempFilePath);
+          self.data.strokeDrawWorksPath.push(res.tempFilePath);
         },
         fail: res => {
           console.log('获取画布图片失败', res);

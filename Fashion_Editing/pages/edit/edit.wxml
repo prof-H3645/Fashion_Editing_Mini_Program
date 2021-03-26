@@ -1,9 +1,9 @@
 <!--pages/edit/edit.wxml-->
 <!-- 上层工具栏 -->
 <view class="upper-toolsbar">
-      <image mode="aspectFit" class="upper-button right-s" src="/icon/seleted.png" bindtap="onGenerate"></image>
-      <image wx:if="{{step>0}}" mode="aspectFit" class="upper-button right-l" src="/icon/return.png" bindtap="onRevoke"></image>
-      <image mode="aspectFit" class="upper-button left-s" src="/icon/close.png" bindtap="onClose"></image>
+      <view class="iconfont icon-select upper-button right-s" bindtap="onGenerate"></view>
+      <view class="iconfont icon-revoke upper-button right-l" bindtap="onRevoke"></view>
+      <view class="iconfont icon-close upper-button left-s" bindtap="onClose"></view>
 </view>
 <!-- 画布 -->
 <view>
@@ -14,7 +14,7 @@
             style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
       <canvas canvas-id="sketch"
             style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
-      <canvas canvas-id="brush"
+      <canvas canvas-id="stroke"
             style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
 </view>
 
@@ -25,10 +25,10 @@
             <view class="iconfont icon-mask"></view><text>蒙版</text>
       </view>
       <view class="{{mode == 1 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{1}}">
-            <view class="iconfont icon-pen"></view><text>素描</text>
+            <view class="iconfont icon-sketch"></view><text>素描</text>
       </view>
       <view class="{{mode == 2 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{2}}">
-            <view class="iconfont icon-brush"></view><text>画笔</text>
+            <view class="iconfont icon-stroke"></view><text>画笔</text>
       </view>
       <view class="lower-button" bindtap="tabChange" data-index="{{3}}">
             <view class="iconfont icon-color"></view><text>颜色</text>

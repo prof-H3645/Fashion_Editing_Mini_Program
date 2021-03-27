@@ -1,9 +1,12 @@
 <!--pages/edit/edit.wxml-->
 <!-- 上层工具栏 -->
-<view class="upper-toolsbar">
-      <view class="iconfont icon-select upper-button right-s" bindtap="onGenerate"></view>
-      <view class="iconfont icon-revoke upper-button right-l" bindtap="onRevoke"></view>
-      <view class="iconfont icon-close upper-button left-s" bindtap="onClose"></view>
+<view class="upper-toolsbar" style="height: {{toolsBarHeight}}px">
+      <view style="font-size:{{toolsBarHeight*0.7}}px;line-height:{{toolsBarHeight*0.7}}px;"
+            class="iconfont icon-select upper-button right-s" bindtap="onGenerate"></view>
+      <view style="font-size:{{toolsBarHeight*0.7}}px;line-height:{{toolsBarHeight*0.7}}px;" wx:if="{{step>0}}"
+            class="iconfont icon-revoke upper-button right-l" bindtap="onRevoke"></view>
+      <view style="font-size:{{toolsBarHeight*0.7}}px;line-height:{{toolsBarHeight*0.7}}px;"
+            class="iconfont icon-close upper-button left-s" bindtap="onClose"></view>
 </view>
 <!-- 画布 -->
 <view>
@@ -17,10 +20,128 @@
       <canvas canvas-id="stroke"
             style="position:absolute;width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{windowWidth+50}}px;top:{{windowHeight+200}}px"></canvas>
 </view>
+<!-- 设置栏 -->
+<view wx:if="{{mode==2}}" class="setting" style="height: {{toolsBarHeight / 2}}px;bottom:{{toolsBarHeight}}px;">
+      <view class="size-select" style="width: 40%">
+            <view style="height: {{toolsBarHeight / 2}}px;width: 5px;" class="size-brick" bindtap="penSizeSelect"
+                  data-p="3">
+                  <view style="height: 5px;width: 5px;" class="{{curSize == '3' ? 'size-item-cur' : 'size-item'}}">
+                  </view>
+            </view>
+            <view style="height: {{toolsBarHeight / 2}}px;width: 9px;" class="size-brick" bindtap="penSizeSelect"
+                  data-p="7">
+                  <view style="height: 9px;width: 9px;" class="{{curSize == '7' ? 'size-item-cur' : 'size-item'}}">
+                  </view>
+            </view>
+            <view style="height: {{toolsBarHeight / 2}}px;width: 12px;" class="size-brick" bindtap="penSizeSelect"
+                  data-p="10">
+                  <view style="height: 12px;width: 12px;" class="{{curSize == '10' ? 'size-item-cur' : 'size-item'}}">
+                  </view>
+            </view>
+            <view style="height: {{toolsBarHeight / 2}}px;width: 15px;" class="size-brick" bindtap="penSizeSelect"
+                  data-p="15">
+                  <view style="height: 15px;width: 15px;" class="{{curSize == '15' ? 'size-item-cur' : 'size-item'}}">
+                  </view>
+            </view>
+            <view style="height: {{toolsBarHeight / 2}}px;width: 20px;" class="size-brick" bindtap="penSizeSelect"
+                  data-p="20">
+                  <view style="height: 20px;width: 20px;" class="{{curSize == '20' ? 'size-item-cur' : 'size-item'}}">
+                  </view>
+            </view>
+      </view>
+      <view class="color-select">
+            <view class="{{ curColor == '#000000' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#000000;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#000000"></view>
+            <view class="{{ curColor == '#1c1c1c' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#1c1c1c;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#1c1c1c"></view>
+            <view class="{{ curColor == '#373737' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#373737;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#373737"></view>
+            <view class="{{ curColor == '#727272' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#727272;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#727272"></view>
+            <view class="{{ curColor == '#bbbbbb' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#bbbbbb;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#bbbbbb"></view>
+            <view class="{{ curColor == '#fffcfd' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#fffcfd;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#fffcfd"></view>
+            <view class="{{ curColor == '#e23c40' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#e23c40;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#e23c40"></view>
+            <view class="{{ curColor == '#ef503b' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#ef503b;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#ef503b"></view>
+            <view class="{{ curColor == '#f86941' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#f86941;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#f86941"></view>
+            <view class="{{ curColor == '#ff8b3e' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#ff8b3e;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#ff8b3e"></view>
+            <view class="{{ curColor == '#f9ac3a' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#f9ac3a;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#f9ac3a"></view>
+            <view class="{{ curColor == '#ffd656' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#ffd656;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#ffd656"></view>
+            <view class="{{ curColor == '#fee759' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#fee759;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#fee759"></view>
+            <view class="{{ curColor == '#dbde53' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#dbde53;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#dbde53"></view>
+            <view class="{{ curColor == '#b1d365' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#b1d365;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#b1d365"></view>
+            <view class="{{ curColor == '#5cb885' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#5cb885;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#5cb885"></view>
+            <view class="{{ curColor == '#77bb6e' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#77bb6e;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#77bb6e"></view>
 
+            <view class="{{ curColor == '#43af8f' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#43af8f;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#43af8f"></view>
+            <view class="{{ curColor == '#24a7a2' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#24a7a2;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#24a7a2"></view>
+            <view class="{{ curColor == '#27acd8' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#27acd8;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#27acd8"></view>
+            <view class="{{ curColor == '#26aff0' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#26aff0;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#26aff0"></view>
+            <view class="{{ curColor == '#269ded' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#269ded;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#269ded"></view>
+            <view class="{{ curColor == '#1c8ae1' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#1c8ae1;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#1c8ae1"></view>
+            <view class="{{ curColor == '#4076dc' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#4076dc;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#4076dc"></view>
+            <view class="{{ curColor == '#5669c8' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#5669c8;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#5669c8"></view>
+            <view class="{{ curColor == '#7856bf' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#7856bf;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#7856bf"></view>
+            <view class="{{ curColor == '#a451a9' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#a451a9;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#a451a9"></view>
+            <view class="{{ curColor == '#db4585' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#db4585;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#db4585"></view>
+            <view class="{{ curColor == '#e8457a' ? 'color-item-cur' : 'color-item'}}"
+                  style="background-color:#e8457a;height: {{toolsBarHeight / 2}}px;" bindtap="colorSelect"
+                  data-p="#e8457a"></view>
+      </view>
+</view>
 <!-- 下层工具栏 -->
-<view class="lower-toolsbar">
-      <!-- <view class="lower-button" bindtap="tabChange" data-index="{{0}}"><image mode="heightFit" src="/icon/蒙版(1).png"></image><text>\n蒙版</text></view> -->
+<view class="lower-toolsbar" style="height: {{toolsBarHeight}}px">
       <view class="{{mode == 0 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{0}}">
             <view class="iconfont icon-mask"></view><text>蒙版</text>
       </view>
@@ -30,63 +151,4 @@
       <view class="{{mode == 2 ? 'lower-button green' : 'lower-button'}}" bindtap="tabChange" data-index="{{2}}">
             <view class="iconfont icon-stroke"></view><text>画笔</text>
       </view>
-      <view class="lower-button" bindtap="tabChange" data-index="{{3}}">
-            <view class="iconfont icon-color"></view><text>颜色</text>
-      </view>
-      <!-- <view class="lower-button" bindtap="tabChange" data-index="{{1}}"><image mode="heightFit" src="/icon/实物-画笔(1).png"></image><text>\n画笔</text></view>
-      <view class="lower-button" bindtap="tabChange" data-index="{{2}}"><image mode="heightFit" src="/icon/颜色选择器(1).png"></image><text>\n颜色</text></view> -->
-</view>
-
-<!-- 弹框 -->
-<popover id="size" pw="{{20 * Dpr}}" px="{{(windowWidth - 10) * 5 / 8}}" py="{{windowHeight - 80/Dpr}}" vertical="top"
-      align="center">
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{curSize == '4' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="4">细</view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{curSize == '10' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="10">中
-            </view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{curSize == '20' ? 'size-item-cur' : 'size-item'}}" bindtap="penSizeSelect" data-p="20">粗
-            </view>
-      </popover-item>
-</popover>
-
-<popover id="color" pw="{{20 * Dpr}}" px="{{(windowWidth - 7) * 7 / 8 }}" py="{{windowHeight - 80 / Dpr - 160}}"
-      vertical="top" align="center">
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#d71345' ? 'color-item-cur' : 'color-item'}}" style="background-color:#d71345"
-                  bindtap="colorSelect" data-p="#d71345"></view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#f58220' ? 'color-item-cur' : 'color-item'}}" style="background-color:#f58220"
-                  bindtap="colorSelect" data-p="#f58220"></view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#ffd400' ? 'color-item-cur' : 'color-item'}}" style="background-color:#ffd400"
-                  bindtap="colorSelect" data-p="#ffd400"></view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#7fb80e' ? 'color-item-cur' : 'color-item'}}" style="background-color:#7fb80e"
-                  bindtap="colorSelect" data-p="#7fb80e"></view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#00a6ac' ? 'color-item-cur' : 'color-item'}}" style="background-color:#00a6ac"
-                  bindtap="colorSelect" data-p="#00a6ac"></view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#009ad6' ? 'color-item-cur' : 'color-item'}}" style="background-color:#009ad6"
-                  bindtap="colorSelect" data-p="#009ad6"></view>
-      </popover-item>
-      <popover-item height="{{20 * Dpr}}">
-            <view class="{{ curColor == '#444693' ? 'color-item-cur' : 'color-item'}}" style="background-color:#444693"
-                  bindtap="colorSelect" data-p="#444693"></view>
-      </popover-item>
-</popover>
-
-<view>
-      <canvas canvas-id="myCanvas" class="myCanvas"
-            style="width:{{imgWidth}}px;height:{{imgHeight}}px;left:{{300}}px;top:{{800}}px" bindtouchstart="touchStart"
-            bindtouchmove="touchMove"></canvas>
 </view>

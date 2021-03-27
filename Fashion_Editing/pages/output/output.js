@@ -9,7 +9,7 @@ Page({
     originalPath: '',
     maskPath: '',
     sketchPath: '',
-    brushPath: '',
+    strokePath: '',
     loading: true,
     error: false
   },
@@ -24,7 +24,7 @@ Page({
       outputPath: app.globalData.outputPath,
       maskPath: app.globalData.maskPath,
       sketchPath: app.globalData.sketchPath,
-      brushPath: app.globalData.brushPath
+      strokePath: app.globalData.strokePath
     })
     var timeoutID = setTimeout(function () {
       self.setData({
@@ -35,9 +35,9 @@ Page({
     var Original64 = wx.getFileSystemManager().readFileSync(app.globalData.outputPath, "base64")
     var Mask64 = wx.getFileSystemManager().readFileSync(app.globalData.maskPath, "base64")
     var Sketch64 = wx.getFileSystemManager().readFileSync(app.globalData.sketchPath, "base64")
-    var Stroke64 = wx.getFileSystemManager().readFileSync(app.globalData.brushPath, "base64")
+    var Stroke64 = wx.getFileSystemManager().readFileSync(app.globalData.strokePath, "base64")
     wx.request({
-      url: 'http://mist@gpu82.mistgpu.xyz:30524/generate',
+      url: 'http://mist@gpu08.mistgpu.xyz:35005/generate',
       data: {
         "data": {
           "name": "new_model_easy233",
@@ -56,7 +56,6 @@ Page({
           clearTimeout(timeoutID)
           wx.downloadFile({
             url: "http://" + res.data.result,
-            // filePath: wx.env.USER_DATA_PATH+'/images/result.png',
             header: {
               'content-type': 'image/png'
             },
@@ -70,6 +69,10 @@ Page({
             },
             fail(res) {
               console.log(res);
+              self.setData({
+                loading: false,
+                error: true
+              })
             }
           })
       },
@@ -91,7 +94,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    wx.hideHomeButton();
   },
 
   /**
@@ -128,6 +131,35 @@ Page({
   onShareAppMessage: function () {
 
   },
+  imageLoad: function(e) {
+    const app = getApp();
+    var imgWidth=e.detail.width;
+    var imgHeight=e.detail.height;
+    var originalWidth = imgWidth;
+    var originalHeight = imgHeight;
+    let windowWidth = app.globalData.windowWidth - 20;
+    let windowHeight = app.globalData.windowHeight - 300;
+    var per = 1.0;
+    while (imgWidth <= windowWidth && imgHeight <= windowHeight) {
+      per += 0.1;
+      imgWidth = per * originalWidth;
+      imgHeight = per * originalHeight;
+      console.log("增");
+    }
+    while (imgWidth >= windowWidth || imgHeight >= windowHeight) {
+      per *= 0.95;
+      imgWidth = per * originalWidth;
+      imgHeight = per * originalHeight;
+      console.log("减");
+    }
+    this.setData({
+      imgWidth: imgWidth,
+      imgHeight: imgHeight,
+      img_X: 10 + (windowWidth - imgWidth) / 2,
+      windowWidth: windowWidth,
+      windowHeight: windowHeight,
+    })
+  },
   onSave: function (e) {
     wx.saveImageToPhotosAlbum({
       filePath: this.data.outputPath,
@@ -161,43 +193,9 @@ Page({
       }
     })
   },
-  onGenerate: function () {
-    var Original64 = wx.getFileSystemManager().readFileSync('images/test.jpg', "base64")
-    var Mask64 = wx.getFileSystemManager().readFileSync('images/mask.png', "base64")
-    var Sketch64 = wx.getFileSystemManager().readFileSync('images/sketch.png', "base64")
-    var Stroke64 = wx.getFileSystemManager().readFileSync('images/stroke.png', "base64")
-    console.log(Original64);
-    wx.request({
-      url: 'https://gpu193.mistgpu.xyz:30324/generate',
-      data: {
-        "data": {
-          "original": Original64,
-          "mask": Mask64,
-          "sketch": Sketch64,
-          "stroke": Stroke64
-        }
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-      success(res) {
-        console.log(res.data)
-      },
-      fail(res) {
-        console.log(res.data)
-      }
+  onReturn:function(){
+    wx.redirectTo({
+      url: '/pages/index/index',
     })
-  },
-  // onDownload:function(){
-  //   wx.downloadFile({
-  //     url: '',
-  //     success(res){
-  //       console.log(res.tempFilePath)
-  //     },
-  //     fail(res){
-  //       console.log(res)
-  //     }
-  //   })
-  // }
+  }
 })

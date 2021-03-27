@@ -3,7 +3,7 @@
 @import "/icon/iconfont.wxss";
 .info {
   display: block;
-  width: 500rpx;
+  width: 100%;
   text-align: center;
   margin: 50rpx auto;
   font-size: 20px;
@@ -13,7 +13,6 @@
 .output {
   display: flex;
   margin: 40rpx auto;
-  
 }
 
 .blank {

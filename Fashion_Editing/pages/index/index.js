@@ -34,7 +34,7 @@ Page({
             app.globalData.imgHeight = data.height;
           }
         })
-        wx.navigateTo({
+        wx.redirectTo({
           url: '/pages/edit/edit'
         })
       },
@@ -46,7 +46,7 @@ Page({
   },
   // 事件处理函数
   bindViewTap() {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '../logs/logs'
     })
   },
